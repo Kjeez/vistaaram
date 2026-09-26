@@ -75,6 +75,7 @@ export default function Footer() {
           src="/images/diya.png"
           alt="Decorative Diya"
           fill
+          sizes="(max-width: 768px) 150px, (max-width: 1024px) 200px, 250px"
           className="object-contain object-left-bottom opacity-80"
         />
       </div>
