@@ -58,6 +58,16 @@ export default function Footer() {
           className="object-contain animate-[spin_60s_linear_infinite]"
         />
       </div>
+
+      {/* Decorative Temple */}
+      <div className="absolute right-0 bottom-0 w-[200px] md:w-[350px] lg:w-[450px] h-[250px] md:h-[400px] lg:h-[500px] pointer-events-none select-none opacity-40 z-0">
+        <Image
+          src="/images/temples_footer.png"
+          alt="Temple Background"
+          fill
+          className="object-contain object-right-bottom"
+        />
+      </div>
       
       {/* Decorative Diya */}
       <div className="absolute left-0 bottom-0 w-[150px] md:w-[200px] lg:w-[250px] h-[150px] md:h-[200px] lg:h-[250px] pointer-events-none select-none z-10">
