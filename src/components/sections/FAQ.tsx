@@ -51,13 +51,8 @@ export default function FAQ() {
   };
 
   return (
-    <section id="faq" ref={sectionRef} className="relative w-full py-20 md:py-24 bg-[#FAF6EE] overflow-hidden">
+    <section id="faq" ref={sectionRef} className="relative w-full py-6 md:py-8 bg-[#FAF6EE] overflow-hidden">
       
-      {/* Decorative Pillar */}
-      <div className="faq-pillar absolute right-0 -top-[5%] h-[110%] w-[300px] md:w-[450px] lg:w-[600px] pointer-events-none opacity-20 z-0 translate-x-16 md:translate-x-24 lg:translate-x-[15%]">
-        <Image src="/images/faq-pillar.png" alt="Decorative Pillar" fill className="object-contain object-right" />
-      </div>
-
       <div className="relative z-10 max-w-[800px] mx-auto px-4 md:px-8">
         
         {/* Header */}
