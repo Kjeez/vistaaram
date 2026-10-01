@@ -598,3 +598,88 @@ export const ourStoryContent = {
     buttonLink: "/product/natural-sambrani-hawan-cup",
   }
 };
+
+/* ────────────── Contact Page ────────────── */
+
+export const contactContent = {
+  header: {
+    eyebrow: "WE'D LOVE TO HEAR FROM YOU",
+    headline: "Get in Touch",
+    subline:
+      "Questions about your order, bulk bookings for temples, or just want to say Har Har Mahadev? We reply within 24 hours.",
+  },
+  info: {
+    cards: [
+      {
+        type: "address",
+        label: "VISIT US",
+        lines: ["Sati Enterprises,", "Sahastradhara Road,", "Dehradun, Uttarakhand - 248013"],
+      },
+      {
+        type: "email",
+        label: "WRITE TO US",
+        lines: ["contact@vistaaram.in"],
+        href: "mailto:contact@vistaaram.in",
+      },
+      {
+        type: "phone",
+        label: "CALL US",
+        lines: ["+91 7819058084"],
+        note: "Mon-Sat, 10 AM - 7 PM IST",
+        href: "tel:+917819058084",
+      },
+      {
+        type: "whatsapp",
+        label: "WHATSAPP US",
+        sublabel: "fastest replies",
+        ctaText: "Chat on WhatsApp",
+        href: "https://wa.me/917819058084",
+      },
+    ],
+    footnote: "For order queries, please share your order number for faster help.",
+  },
+  form: {
+    title: "Send Us a Message",
+    subjectOptions: [
+      "Order Support",
+      "Product Question",
+      "Bulk or Temple Order",
+      "Collaboration",
+      "Other",
+    ],
+    directEmail: "contact@vistaaram.in",
+    cta: "SEND MESSAGE",
+  },
+  map: {
+    src: "https://maps.google.com/maps?q=Sahastradhara+Road+Dehradun+Uttarakhand&output=embed",
+    overlayLine1: "Vistaaram - Sati Enterprises",
+    overlayLine2: "Sahastradhara Road, Dehradun",
+  },
+  quickHelp: {
+    headline: "Before You Reach Out",
+    subline: "Here are some quick links that might help you find what you're looking for.",
+    cards: [
+      {
+        type: "track",
+        title: "Track My Order",
+        desc: "Check your tracking link from the SMS/WhatsApp we sent you.",
+        cta: "Learn more",
+        href: "/track",
+      },
+      {
+        type: "returns",
+        title: "Returns & Refunds",
+        desc: "7-day easy returns, no questions asked.",
+        cta: "Learn more",
+        href: "/returns",
+      },
+      {
+        type: "faq",
+        title: "FAQs",
+        desc: "Burn time, shipping, safety - answered instantly.",
+        cta: "Learn more",
+        href: "/#faq",
+      },
+    ],
+  },
+};
