@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import { navbarContent } from "@/data/content";
 import { useCart } from "@/context/CartContext";
+import Link from "next/link";
 
 /* ── SVG Icon Components ────────────────────────────── */
 
@@ -136,7 +137,7 @@ export default function Navbar() {
       >
         <div className="w-full h-full mx-auto flex items-center justify-between">
           {/* ── Left: Logo ── */}
-          <a href="#" className="shrink-0 relative flex items-center h-full pt-1 pb-1" aria-label="Vistaaram Home">
+          <Link href="/" className="shrink-0 relative flex items-center h-full pt-1 pb-1" aria-label="Vistaaram Home">
             <Image
               src={navbarContent.logo}
               alt="Vistaaram - From Devbhoomi Uttarakhand"
@@ -145,18 +146,18 @@ export default function Navbar() {
               className="h-full w-auto object-contain py-1"
               priority
             />
-          </a>
+          </Link>
 
           {/* ── Center: Nav Links (desktop only) ── */}
           <div className="hidden lg:flex items-center gap-10">
             {navbarContent.links.map((link) => (
-              <a
+              <Link
                 key={link.label}
                 href={link.href}
                 className="relative text-[17px] font-display text-maroon-dark hover:text-maroon transition-colors duration-200"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -171,7 +172,8 @@ export default function Navbar() {
             </button>
 
             {/* Cart */}
-            <button
+            <Link
+              href="/cart"
               className="relative p-1 hover:text-maroon transition-colors duration-200 cursor-pointer text-maroon-dark"
               aria-label={`Cart (${count} items)`}
             >
@@ -180,7 +182,7 @@ export default function Navbar() {
               <span className="absolute top-0 -right-1.5 min-w-4 h-4 flex items-center justify-center rounded-full bg-maroon-dark text-white text-[10px] font-bold leading-none px-1 border border-cream">
                 {count}
               </span>
-            </button>
+            </Link>
 
             {/* First Divider */}
             <div className="hidden lg:block w-px h-8 bg-[#E5DCC5] mx-1" />
@@ -241,7 +243,7 @@ export default function Navbar() {
             {/* Links */}
             <nav className="flex flex-col gap-1">
               {navbarContent.links.map((link, i) => (
-                <a
+                <Link
                   key={link.label}
                   href={link.href}
                   onClick={handleNavClick}
@@ -255,7 +257,7 @@ export default function Navbar() {
                   }}
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
             </nav>
 

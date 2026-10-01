@@ -1,5 +1,6 @@
 import { footerContent } from "@/data/content";
 import Image from "next/image";
+import Link from "next/link";
 
 function SmallLotus() {
   return (
@@ -111,18 +112,22 @@ export default function Footer() {
           <div className="hidden md:block md:col-span-1 border-r border-[#C9A24B]/20 min-h-full"></div>
 
           {/* Quick Links Column (Center) */}
-          <div className="md:col-span-3 flex flex-col">
-            <h3 className="font-display text-[26px] font-medium text-[#C9A24B] mb-8">Quick Links</h3>
-            <ul className="flex flex-col gap-5">
-              {["Return & Refund Policy", "Shipping & Delivery", "Privacy Policy", "Terms & Conditions"].map((link) => (
-                <li key={link}>
-                  <a href="#" className="flex items-center justify-between text-[#FAF6EE]/80 hover:text-[#C9A24B] text-[15px] transition-colors group">
-                    <span>{link}</span>
-                    <span className="text-[#C9A24B] group-hover:translate-x-1 transition-transform">›</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+          <div className="md:col-span-3 flex flex-col gap-10">
+            {footerContent.sections.slice(0, 2).map((section, idx) => (
+              <div key={idx}>
+                <h3 className="font-display text-[22px] font-medium text-[#C9A24B] mb-5">{section.title}</h3>
+                <ul className="flex flex-col gap-3">
+                  {section.links.map((link) => (
+                    <li key={link.label}>
+                      <Link href={link.href} className="flex items-center justify-between text-[#FAF6EE]/80 hover:text-[#C9A24B] text-[15px] transition-colors group">
+                        <span>{link.label}</span>
+                        <span className="text-[#C9A24B] group-hover:translate-x-1 transition-transform">›</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
 
           <div className="hidden md:block md:col-span-1 border-r border-[#C9A24B]/20 min-h-full"></div>

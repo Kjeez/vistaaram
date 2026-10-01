@@ -107,11 +107,11 @@ export const tickerContent: TickerItem[] = [
 export const navbarContent = {
   logo: "/images/logo.png",
   links: [
-    { label: "Shop", href: "#product" },
-    { label: "Our Story", href: "#story" },
-    { label: "Process", href: "#process" },
-    { label: "Rituals", href: "#rituals" },
-    { label: "Reviews", href: "#testimonials" },
+    { label: "Shop", href: "/product/natural-sambrani-hawan-cup" },
+    { label: "Our Story", href: "/story" },
+    { label: "Process", href: "/#process" },
+    { label: "Rituals", href: "/#rituals" },
+    { label: "Reviews", href: "/#testimonials" },
   ],
   whatsappLink: "https://wa.me/91XXXXXXXXXX",
   taglineSide: { line1: "A SMALL RITUAL", line2: "A BRIGHTER", line3: "TOMORROW" },
@@ -143,9 +143,9 @@ export const heroSlides: HeroSlide[] = [
     subheadline:
       "Natural Sambrani Hawan Cups — temple flowers & cow dung, blessed by 500+ pandits. Charcoal-free. Chemical-free.",
     cta: "ADD TO CART — ₹279",
-    ctaLink: "#product",
+    ctaLink: "/product/natural-sambrani-hawan-cup",
     ctaSecondary: "OUR PROCESS ↓",
-    ctaSecondaryLink: "#process",
+    ctaSecondaryLink: "/#process",
     stats: [
       { icon: "⭐", value: "4.8", label: "" },
       { icon: "📦", value: "12", label: "Cups" },
@@ -238,11 +238,11 @@ export const productContent: Product = {
   mrp: 399,
   discount: "30% OFF",
   images: [
-    { src: "/images/product-1.jpg", alt: "Sambrani Hawan Cup - Front View" },
-    { src: "/images/product-2.jpg", alt: "Sambrani Hawan Cup - Burning" },
-    { src: "/images/product-3.jpg", alt: "Sambrani Hawan Cup - Ingredients" },
-    { src: "/images/product-4.jpg", alt: "Sambrani Hawan Cup - Packaging" },
-    { src: "/images/product-5.jpg", alt: "Sambrani Hawan Cup - In Use" },
+    { src: "/images/product/1.jpg", alt: "Sambrani Hawan Cup - Front View" },
+    { src: "/images/product/2.jpg", alt: "Sambrani Hawan Cup - Burning" },
+    { src: "/images/product/3.jpg", alt: "Sambrani Hawan Cup - Ingredients" },
+    { src: "/images/product/4.jpg", alt: "Sambrani Hawan Cup - Packaging" },
+    { src: "/images/product/5.jpg", alt: "Sambrani Hawan Cup - In Use" },
   ],
   features: [
     "12 cups per pack",
@@ -504,10 +504,10 @@ export const footerContent = {
     {
       title: "Quick Links",
       links: [
-        { label: "Home", href: "#" },
-        { label: "Shop", href: "#product" },
-        { label: "Our Story", href: "#story" },
-        { label: "FAQ", href: "#faq" },
+        { label: "Home", href: "/" },
+        { label: "Shop", href: "/product/natural-sambrani-hawan-cup" },
+        { label: "Our Story", href: "/story" },
+        { label: "FAQ", href: "/#faq" },
       ],
     },
     {
@@ -530,4 +530,71 @@ export const footerContent = {
   ] as FooterSection[],
   copyright: `© ${new Date().getFullYear()} Vistaaram. All rights reserved.`,
   madeIn: "Made with 🙏 in Devbhoomi, Uttarakhand",
+};
+
+/* ────────────── Our Story Page ────────────── */
+
+export const ourStoryContent = {
+  hero: {
+    eyebrow: "THE VISTAARAM STORY",
+    headline: "It Begins in Devbhoomi",
+    image: "/images/our_story_banner.jpg",
+  },
+  chapters: [
+    {
+      id: 1,
+      number: "CHAPTER ONE",
+      title: "The Land of Gods",
+      body: "High in the Himalayas lies Devbhoomi — the land of gods. Home to the four dhams, thousands of temples, and a tradition of worship that is thousands of years old. This is where Vistaaram was born.",
+      image: "/images/Elderly Hands Lighting a Sacred Diya.jpg",
+      dhams: [
+        { name: "Yamunotri", icon: "🛕" },
+        { name: "Gangotri", icon: "🛕" },
+        { name: "Kedarnath", icon: "🛕" },
+        { name: "Badrinath", icon: "🛕" },
+      ],
+      pullQuote: null,
+    },
+    {
+      id: 2,
+      number: "CHAPTER TWO",
+      title: "Why We Started",
+      body: "Every day, tons of sacred flowers offered in temples are discarded. At the same time, most homes burn chemical-based dhoop and agarbattis filled with synthetic fragrances.\n\nWe saw a gap — a way to turn temple flowers into something pure, natural and meaningful, so that every home can experience the same divinity found in the temples of Devbhoomi.",
+      image: "/images/Golden Temple Flowers at Sunset.jpg",
+      dhams: null,
+      pullQuote: "We wanted every home to smell like a temple, not a chemistry lab.",
+    }
+  ],
+  panditNetwork: {
+    eyebrow: "500+ YEARS OF WISDOM",
+    headline: "Blessed by the Pandits of Devbhoomi",
+    body: "Every blend is guided by the knowledge of 500+ pandits — the same hands that have performed hawans in Devbhoomi's temples for generations.",
+    image: "/images/pandits.jpg",
+  },
+  timeline: [
+    { year: "2023 · DEHRADUN", title: "The First Blend", desc: "Our first hawan cups, hand-made in a small Dehradun workshop.", image: "/images/process-1.jpg" },
+    { year: "2024 · ACROSS INDIA", title: "100 Homes", desc: "Our first 100 orders shipped across India.", image: "/images/product/4.jpg" },
+    { year: "2024 · UTTARAKHAND", title: "The Pandit Network", desc: "500+ pandits began guiding every blend.", image: "/images/pandits.jpg" },
+    { year: "2025 · OUR BRAND", title: "The Final Packaging", desc: "Our box, our promise, ready for every home.", image: "/images/product/1.jpg" },
+    { year: "2026 · A BIGGER VISION", title: "What's Next", desc: "The Daily Puja Kit, coming soon.", image: "/images/coming-soon-1.jpg" },
+  ],
+  founders: [
+    {
+      name: "Pankaj Sati",
+      role: "FOUNDER",
+      note: "Founder bio placeholder — replace this with the approved 2-3 line personal note.",
+      image: "/images/founder.jpg",
+      instagram: "https://instagram.com/vistaaram"
+    }
+  ],
+  values: [
+    { icon: "🌿", title: "Purity", desc: "100% natural, charcoal-free, chemical-free." },
+    { icon: "🪔", title: "Devotion", desc: "Guided by the knowledge of 500+ pandits." },
+    { icon: "🏔️", title: "Devbhoomi", desc: "Sourced and packed in Uttarakhand, creating local livelihoods." },
+  ],
+  cta: {
+    headline: "Bring Devbhoomi Into Your Home",
+    buttonText: "ADD TO CART — ₹279",
+    buttonLink: "/product/natural-sambrani-hawan-cup",
+  }
 };

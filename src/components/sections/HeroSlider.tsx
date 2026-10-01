@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import { heroSlides } from "@/data/content";
 import { useCart } from "@/context/CartContext";
+import { useRouter } from "next/navigation";
 
 /* =========================================================
    ICONS
@@ -168,8 +169,22 @@ export default function HeroSlider() {
     },
     { scope: heroRef }
   );
+  const { addItem } = useCart();
+  const router = useRouter();
 
-  const { addToCart } = useCart();
+  const handleAddToCart = () => {
+    // Assuming productContent is imported or we hardcode the first item
+    addItem({
+      id: "sambrani-cup",
+      name: "Natural Sambrani Hawan Cup",
+      price: 279,
+      originalPrice: 399,
+      quantity: 1,
+      image: "/images/slide1.jpg",
+      subtitle: "₹23 per cup · 12 cups per box",
+    });
+    router.push("/cart");
+  };
 
   const total = heroSlides.length;
   const slide = heroSlides[current];
@@ -574,7 +589,7 @@ export default function HeroSlider() {
               <button
                 type="button"
                 onClick={() =>
-                  addToCart()
+                  handleAddToCart()
                 }
                 className="
                   inline-flex
@@ -1042,7 +1057,7 @@ export default function HeroSlider() {
           <button
             type="button"
             onClick={() =>
-              addToCart()
+              handleAddToCart()
             }
             className="
               w-full

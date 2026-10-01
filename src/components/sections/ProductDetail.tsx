@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { productContent } from "@/data/content";
+import { useCart } from "@/context/CartContext";
+import { useRouter } from "next/navigation";
 
 /* =========================================================
    ICONS
@@ -89,19 +91,37 @@ function GiftIcon() {
   );
 }
 
-export default function ProductPDP() {
+export default function ProductDetail() {
   const [activeThumb, setActiveThumb] = useState(0);
   const [qty, setQty] = useState(1);
-  const images = productContent.images.map(img => img.src);
+  const { addItem } = useCart();
+  const router = useRouter();
+  const images = productContent.images;
+
+  const handleAddToCart = () => {
+    addItem({
+      id: "sambrani-cup",
+      name: productContent.name,
+      price: productContent.price,
+      originalPrice: productContent.mrp,
+      quantity: qty,
+      image: productContent.images[0].src,
+      subtitle: "₹23 per cup · 12 cups per box",
+    });
+    router.push("/cart");
+  };
 
   return (
-    <section className="relative w-full bg-[#FAF6EE]">
-      {/* Top Border */}
-      <div className="relative w-full border-t border-[#E6DED2]">
-        <DiamondDecor />
-      </div>
+    <section className="relative w-full bg-[#FAF6EE] pt-8 lg:pt-12">
+      <div className="mx-auto max-w-[1360px] px-6 lg:px-12 pb-16">
+        
+        {/* Breadcrumb at the very top for desktop, or above image for mobile */}
+        <div className="flex items-center text-[13px] text-[#6B6259] mb-6">
+          <a href="/" className="hover:text-[#751E29] transition-colors">Home</a>
+          <span className="mx-2 text-[#C9A24B]">/</span>
+          <span className="text-[#4A423C] font-medium">{productContent.name}</span>
+        </div>
 
-      <div className="mx-auto max-w-[1360px] px-6 lg:px-12 py-16">
         <div className="flex flex-col lg:flex-row gap-8 xl:gap-12 items-start">
           
           {/* =================================================
@@ -120,19 +140,8 @@ export default function ProductPDP() {
                   ${i === activeThumb ? "border-[2px] border-[#C9A24B] shadow-sm p-0.5" : "border-[#E6DED2] hover:border-[#C9A24B]/50"}
                 `}
               >
-                <div className="relative w-full h-full rounded-[4px] overflow-hidden">
-                  <Image src={img} alt={`Thumbnail ${i+1}`} fill className="object-cover" />
-                  
-                  {/* Video Play Overlay on 5th thumbnail */}
-                  {i === 4 && (
-                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                      <div className="w-8 h-8 rounded-full border border-white/80 bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="white">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </div>
-                    </div>
-                  )}
+                <div className="relative w-full h-full rounded-[4px] overflow-hidden bg-white">
+                  <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="110px" />
                 </div>
               </button>
             ))}
@@ -143,13 +152,14 @@ export default function ProductPDP() {
           ================================================= */}
           
           <div className="w-full lg:w-[45%] flex flex-col items-center">
-            <div className="relative w-full aspect-square rounded-[16px] overflow-hidden border border-[#E6DED2] bg-white shadow-[0_4px_24px_rgba(60,35,20,0.04)]">
+            <div className="relative w-full aspect-square lg:aspect-auto lg:h-[606px] rounded-[16px] overflow-hidden border border-[#E6DED2] bg-white shadow-[0_4px_24px_rgba(60,35,20,0.04)]">
               <Image 
-                src={images[activeThumb]} 
-                alt="Natural Sambrani Hawan Cup" 
+                src={images[activeThumb].src} 
+                alt={images[activeThumb].alt} 
                 fill 
                 className="object-cover" 
                 priority
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
             <div className="flex items-center gap-2 mt-4 text-[#756A63] text-[12px] font-medium">
@@ -165,12 +175,12 @@ export default function ProductPDP() {
                   type="button"
                   onClick={() => setActiveThumb(i)}
                   className={`
-                    relative w-[70px] h-[70px] shrink-0 rounded-[8px] overflow-hidden 
+                    relative w-[70px] h-[70px] shrink-0 rounded-[8px] overflow-hidden bg-white
                     border transition-all duration-200
                     ${i === activeThumb ? "border-[2px] border-[#C9A24B]" : "border-[#E6DED2]"}
                   `}
                 >
-                  <Image src={img} alt={`Thumbnail ${i+1}`} fill className="object-cover" />
+                  <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="70px" />
                 </button>
               ))}
             </div>
@@ -236,13 +246,13 @@ export default function ProductPDP() {
             
             {/* Chips */}
             <div className="flex flex-wrap gap-2.5 mb-7">
-              <span className="bg-[#EFE8D8] text-[#5A4F46] text-[12px] font-medium px-4 py-2 rounded-full">
+              <span className="bg-[#EFE8D8] text-[#5A4F46] text-[12px] font-medium px-4 py-2 rounded-full border border-[#E6DED2]">
                 12 Cups
               </span>
-              <span className="bg-[#EFE8D8] text-[#5A4F46] text-[12px] font-medium px-4 py-2 rounded-full">
+              <span className="bg-[#EFE8D8] text-[#5A4F46] text-[12px] font-medium px-4 py-2 rounded-full border border-[#E6DED2]">
                 100% Natural
               </span>
-              <span className="bg-[#EFE8D8] text-[#5A4F46] text-[12px] font-medium px-4 py-2 rounded-full">
+              <span className="bg-[#EFE8D8] text-[#5A4F46] text-[12px] font-medium px-4 py-2 rounded-full border border-[#E6DED2]">
                 Made in Uttarakhand
               </span>
             </div>
@@ -285,9 +295,12 @@ export default function ProductPDP() {
                 </button>
               </div>
               
-              <button className="flex-1 h-[52px] rounded-full bg-[#751E29] text-[#FAF6EE] text-[13px] font-semibold tracking-[0.1em] uppercase flex items-center justify-center gap-3 shadow-[0_6px_18px_rgba(117,30,41,0.2)] hover:bg-[#5E1620] hover:shadow-[0_8px_24px_rgba(117,30,41,0.3)] transition-all">
+              <button 
+                onClick={handleAddToCart}
+                className="flex-1 h-[52px] rounded-full bg-[#751E29] text-[#FAF6EE] text-[13px] font-semibold tracking-[0.1em] uppercase flex items-center justify-center gap-3 shadow-[0_6px_18px_rgba(117,30,41,0.2)] hover:bg-[#5E1620] transition-all"
+              >
                 <CartIcon />
-                ADD TO CART — ₹279
+                ADD TO CART — ₹{productContent.price * qty}
               </button>
             </div>
             
@@ -297,7 +310,7 @@ export default function ProductPDP() {
             </p>
             
             {/* Upsell / Launch box */}
-            <div className="flex items-center gap-4 p-4 rounded-[8px] border border-[#C9A24B]/40 bg-white/50">
+            <div className="flex items-center gap-4 p-4 rounded-[8px] border border-[#C9A24B]/40 bg-[#FAF6EE]/50">
               <div className="shrink-0">
                 <GiftIcon />
               </div>
@@ -311,11 +324,6 @@ export default function ProductPDP() {
             
           </div>
         </div>
-      </div>
-
-      {/* Bottom Border */}
-      <div className="relative w-full border-t border-[#E6DED2]">
-        <DiamondDecor />
       </div>
     </section>
   );
