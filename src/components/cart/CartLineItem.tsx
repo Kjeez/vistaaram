@@ -23,7 +23,12 @@ export default function CartLineItem({ item }: { item: CartItem }) {
         
         {/* Thumbnail */}
         <div className="relative w-24 h-24 shrink-0 rounded-xl overflow-hidden bg-white border border-[#E6DED2]">
-          <Image src={item.image} alt={item.name} fill className="object-cover" />
+          <Image 
+            src={item.image?.startsWith("http://localhost") ? item.image.replace(/^http:\/\/localhost(:\d+)?/, "") : (item.image || "/images/product/1.jpg")} 
+            alt={item.name} 
+            fill 
+            className="object-cover" 
+          />
         </div>
 
         {/* Info */}
@@ -74,8 +79,8 @@ export default function CartLineItem({ item }: { item: CartItem }) {
         </div>
       </div>
 
-      {/* Upsell Row (only show if quantity is 1) */}
-      {item.quantity === 1 && item.id === 'sambrani-cup' && (
+      {/* Upsell Row (only show if 1-box item) */}
+      {item.quantity === 1 && (item.price === 279 || item.name?.includes("Pack of 1") || item.name?.includes("1 Box") || item.id === 'sambrani-cup' || item.id === 'sambrani-cup-pack-1') && (
         <div className="flex items-center justify-between bg-[#FAF6EE] border border-[#C9A24B]/40 rounded-lg p-3 sm:px-4 sm:py-3 mt-2 mb-4">
           <div className="flex items-center gap-3">
             {/* Simple diya icon */}
@@ -85,14 +90,14 @@ export default function CartLineItem({ item }: { item: CartItem }) {
               <path d="M12 20s-6-3-6-8c0-3.3 2.7-6 6-9 3.3 3 6 5.7 6 9 0 5-6 8-6 8z" fill="none" />
             </svg>
             <p className="text-[#5A4F46] text-[13px] md:text-[14px]">
-              <span className="font-medium">Complete your ritual</span> — add a 2nd box and save 10%
+              <span className="font-medium">Complete your ritual</span> — upgrade to 2 boxes & save 10%
             </p>
           </div>
           <button 
             onClick={addBundle}
             className="shrink-0 ml-4 h-8 px-4 border border-[#C9A24B] rounded-full text-[#78591A] text-[12px] font-semibold tracking-wide bg-white hover:bg-[#EADAB8] transition-colors whitespace-nowrap"
           >
-            Add — ₹502 total
+            Upgrade — ₹502 total
           </button>
         </div>
       )}

@@ -172,9 +172,9 @@ export default function HeroSlider() {
   const { addItem } = useCart();
   const router = useRouter();
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     // Assuming productContent is imported or we hardcode the first item
-    addItem({
+    await addItem({
       id: "sambrani-cup",
       name: "Natural Sambrani Hawan Cup",
       price: 279,

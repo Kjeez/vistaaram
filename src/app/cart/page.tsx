@@ -34,8 +34,8 @@ export default function CartPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           
           {/* HEADER */}
-          <div className="flex flex-col items-center text-center mb-8">
-            <h1 className="font-display font-medium text-[#7A1F2B] text-[2.25rem] leading-tight mb-2">
+          <div className="flex flex-col items-center text-center mb-3">
+            <h1 className="font-display font-medium text-[#7A1F2B] text-[2.25rem] leading-tight mb-1">
               Your Cart
             </h1>
             <p className="text-[#8E8783] text-[14px]">
@@ -43,8 +43,8 @@ export default function CartPage() {
             </p>
           </div>
           
-          <div className="w-full max-w-[600px] mx-auto mb-10">
-            <PahadiDivider className="py-2 bg-transparent" />
+          <div className="w-full max-w-[420px] mx-auto mb-6">
+            <PahadiDivider className="py-1 bg-transparent" />
           </div>
 
           {items.length === 0 ? (

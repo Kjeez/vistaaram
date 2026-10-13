@@ -16,7 +16,7 @@ import Footer from "@/components/sections/Footer";
 
 export default function Home() {
   return (
-    <CartProvider>
+    <>
       <Ticker />
       <Navbar />
       <main>
@@ -35,6 +35,6 @@ export default function Home() {
         <ComingSoon />
       </main>
       <Footer />
-    </CartProvider>
+    </>
   );
 }

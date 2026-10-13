@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { productContent } from "@/data/content";
 import { useCart } from "@/context/CartContext";
 import { useRouter } from "next/navigation";
+import { PACK_OPTIONS, ProductPackOption } from "@/lib/medusa";
 
 /* =========================================================
    ICONS
@@ -92,21 +93,40 @@ function GiftIcon() {
 }
 
 export default function ProductDetail() {
+  const [selectedPack, setSelectedPack] = useState<ProductPackOption>(PACK_OPTIONS[0]);
   const [activeThumb, setActiveThumb] = useState(0);
   const [qty, setQty] = useState(1);
   const { addItem } = useCart();
   const router = useRouter();
   const images = productContent.images;
 
-  const handleAddToCart = () => {
-    addItem({
-      id: "sambrani-cup",
-      name: productContent.name,
-      price: productContent.price,
-      originalPrice: productContent.mrp,
+  // Sync pack change with external components (e.g. StickyAddToCart)
+  const handleSelectPack = (pack: ProductPackOption) => {
+    setSelectedPack(pack);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("vistaaram:pack-change", { detail: pack.id }));
+    }
+  };
+
+  useEffect(() => {
+    const onExternalPackChange = (e: any) => {
+      const pack = PACK_OPTIONS.find((p) => p.id === e.detail);
+      if (pack) setSelectedPack(pack);
+    };
+    window.addEventListener("vistaaram:pack-change", onExternalPackChange);
+    return () => window.removeEventListener("vistaaram:pack-change", onExternalPackChange);
+  }, []);
+
+  const handleAddToCart = async () => {
+    await addItem({
+      id: `sambrani-cup-${selectedPack.id}`,
+      name: `${productContent.name} — ${selectedPack.name}`,
+      variantId: selectedPack.variantId,
+      price: selectedPack.price,
+      originalPrice: selectedPack.mrp,
       quantity: qty,
       image: productContent.images[0].src,
-      subtitle: "₹23 per cup · 12 cups per box",
+      subtitle: `${selectedPack.cups} Cups · ${selectedPack.shortTitle} · ${selectedPack.ratePerBox}`,
     });
     router.push("/cart");
   };
@@ -207,17 +227,17 @@ export default function ProductDetail() {
             {/* Pricing */}
             <div className="flex items-center gap-4 mb-2">
               <span className="text-[#8E8783] text-[22px] line-through font-medium">
-                ₹399
+                ₹{selectedPack.mrp * qty}
               </span>
               <span className="text-[#751E29] text-[32px] font-bold leading-none">
-                ₹279
+                ₹{selectedPack.price * qty}
               </span>
               <span className="bg-[#EADAB8] text-[#78591A] text-[12px] font-semibold px-3 py-1.5 rounded-full ml-1">
-                You save ₹120
+                You save ₹{(selectedPack.mrp - selectedPack.price) * qty} ({selectedPack.savingsPercent}% OFF)
               </span>
             </div>
             <p className="text-[#A28850] text-[14px] italic font-display mb-6">
-              That's ₹23 per cup — less than a day's agarbatti
+              {selectedPack.tagline}
             </p>
             
             {/* Features (3 columns) */}
@@ -245,9 +265,9 @@ export default function ProductDetail() {
             </div>
             
             {/* Chips */}
-            <div className="flex flex-wrap gap-2.5 mb-7">
+            <div className="flex flex-wrap gap-2.5 mb-6">
               <span className="bg-[#EFE8D8] text-[#5A4F46] text-[12px] font-medium px-4 py-2 rounded-full border border-[#E6DED2]">
-                12 Cups
+                {selectedPack.cups} Cups ({selectedPack.shortTitle})
               </span>
               <span className="bg-[#EFE8D8] text-[#5A4F46] text-[12px] font-medium px-4 py-2 rounded-full border border-[#E6DED2]">
                 100% Natural
@@ -255,6 +275,107 @@ export default function ProductDetail() {
               <span className="bg-[#EFE8D8] text-[#5A4F46] text-[12px] font-medium px-4 py-2 rounded-full border border-[#E6DED2]">
                 Made in Uttarakhand
               </span>
+            </div>
+
+            {/* Pack Size Selector (Pack of 1, Pack of 2, Pack of 4) */}
+            <div className="mb-7">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-[12px] font-bold tracking-[0.16em] uppercase text-[#751E29]">
+                    Select Pack Size
+                  </span>
+                  <span className="text-[#C9A24B] text-[10px]">✦</span>
+                  <span className="text-[12px] text-[#756A63] font-medium">
+                    {selectedPack.name} ({selectedPack.cups} Cups)
+                  </span>
+                </div>
+                {selectedPack.freeShipping && (
+                  <span className="text-[11px] font-semibold text-[#1E5631] bg-[#EAF5EC] px-2.5 py-0.5 rounded-full border border-[#C8E6C9] flex items-center gap-1">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M20 6L9 17l-5-5" />
+                    </svg>
+                    Free Express Shipping
+                  </span>
+                )}
+              </div>
+
+              <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+                {PACK_OPTIONS.map((pack) => {
+                  const isSelected = selectedPack.id === pack.id;
+                  return (
+                    <button
+                      key={pack.id}
+                      type="button"
+                      onClick={() => handleSelectPack(pack)}
+                      className={`
+                        relative flex flex-col items-start p-3 sm:p-3.5 rounded-[12px] text-left transition-all duration-200 cursor-pointer
+                        ${
+                          isSelected
+                            ? "bg-[#FFFDF8] border-[2px] border-[#751E29] shadow-[0_6px_20px_rgba(117,30,41,0.12)] -translate-y-0.5"
+                            : "bg-white border border-[#E6DED2] hover:border-[#C9A24B] hover:shadow-[0_2px_8px_rgba(60,35,20,0.06)]"
+                        }
+                      `}
+                    >
+                      {/* Badge on top */}
+                      {pack.badge && (
+                        <div
+                          className={`
+                            absolute -top-[10px] left-1/2 -translate-x-1/2 whitespace-nowrap px-2.5 py-[2px] rounded-full text-[9px] font-bold uppercase tracking-wider shadow-sm z-10
+                            ${
+                              pack.badgeType === "green"
+                                ? "bg-[#1E5631] text-white border border-[#2E7D32]"
+                                : "bg-[#751E29] text-[#FAF6EE] border border-[#C9A24B]"
+                            }
+                          `}
+                        >
+                          {pack.badge}
+                        </div>
+                      )}
+
+                      {/* Header with Radio circle & Pack name */}
+                      <div className="flex items-center gap-1.5 sm:gap-2 w-full mb-1">
+                        <div
+                          className={`
+                            w-4 h-4 rounded-full border flex items-center justify-center shrink-0 transition-colors
+                            ${isSelected ? "border-[#751E29] bg-[#751E29]" : "border-[#C9A24B]/70 bg-white"}
+                          `}
+                        >
+                          {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                        </div>
+                        <span
+                          className={`text-[13px] sm:text-[14px] font-semibold leading-tight truncate ${
+                            isSelected ? "text-[#751E29]" : "text-[#4A423C]"
+                          }`}
+                        >
+                          {pack.name}
+                        </span>
+                      </div>
+
+                      {/* Cups & Boxes subtitle */}
+                      <div className="text-[11px] text-[#756A63] pl-5.5 sm:pl-6 mb-2">
+                        {pack.cups} Cups · {pack.shortTitle}
+                      </div>
+
+                      {/* Pricing & strike */}
+                      <div className="pl-5.5 sm:pl-6 mt-auto w-full">
+                        <div className="flex items-baseline gap-1.5 flex-wrap">
+                          <span className="text-[16px] sm:text-[18px] font-bold text-[#751E29] leading-none">
+                            ₹{pack.price}
+                          </span>
+                          <span className="text-[11px] text-[#8E8783] line-through">
+                            ₹{pack.mrp}
+                          </span>
+                        </div>
+
+                        {/* Rate / savings note */}
+                        <div className="mt-1.5 inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded bg-[#FAF4E8] text-[#78591A] border border-[#EADAB8]/60">
+                          {pack.ratePerBox}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
             
             {/* Pincode & Delivery Info */}
@@ -300,7 +421,7 @@ export default function ProductDetail() {
                 className="flex-1 h-[52px] rounded-full bg-[#751E29] text-[#FAF6EE] text-[13px] font-semibold tracking-[0.1em] uppercase flex items-center justify-center gap-3 shadow-[0_6px_18px_rgba(117,30,41,0.2)] hover:bg-[#5E1620] transition-all"
               >
                 <CartIcon />
-                ADD TO CART — ₹{productContent.price * qty}
+                ADD TO CART — ₹{selectedPack.price * qty}
               </button>
             </div>
             

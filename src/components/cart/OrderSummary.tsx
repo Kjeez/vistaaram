@@ -53,19 +53,19 @@ function TruckIcon() {
 }
 
 export default function OrderSummary() {
-  const { subtotal, shipping, discount, total, applyCoupon, coupon, removeCoupon } = useCart();
+  const { subtotal, shipping, discount, tax, total, applyCoupon, coupon, removeCoupon, isLoading } = useCart();
   const [codeInput, setCodeInput] = useState("");
   const [couponMsg, setCouponMsg] = useState<{ text: string; isError: boolean } | null>(null);
 
-  const handleApplyCoupon = () => {
-    if (!codeInput) return;
-    const res = applyCoupon(codeInput);
+  const handleApplyCoupon = async () => {
+    if (!codeInput.trim()) return;
+    const res = await applyCoupon(codeInput);
     setCouponMsg({ text: res.message, isError: !res.success });
     if (res.success) setCodeInput("");
   };
 
-  const handleRemoveCoupon = () => {
-    removeCoupon();
+  const handleRemoveCoupon = async () => {
+    await removeCoupon();
     setCouponMsg(null);
   };
 
@@ -95,6 +95,18 @@ export default function OrderSummary() {
           <div className="flex justify-between items-center text-[#228B22]">
             <span>Discount ({coupon})</span>
             <span className="font-medium">-₹{discount}</span>
+          </div>
+        )}
+
+        {tax > 0 ? (
+          <div className="flex justify-between items-center text-[#5A4F46]">
+            <span>GST / Taxes</span>
+            <span className="font-medium text-[#4A423C]">₹{tax}</span>
+          </div>
+        ) : (
+          <div className="flex justify-between items-center text-[#8E8783] text-[12px]">
+            <span>Taxes</span>
+            <span>Included in price</span>
           </div>
         )}
       </div>

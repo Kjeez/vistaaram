@@ -41,15 +41,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+import { CartProvider } from "@/context/CartContext";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
       className={`${playfairDisplay.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-cream text-ink font-body">
-        <ScrollToTop />
-        {children}
+        <CartProvider>
+          <ScrollToTop />
+          {children}
+        </CartProvider>
       </body>
     </html>
   );
