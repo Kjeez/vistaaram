@@ -9,33 +9,45 @@ interface PageTransitionProps {
 }
 
 /**
- * Wraps page content with a smooth GSAP fade-up entrance animation.
- * Use this around <main> in each page that needs an entry animation.
+ * Wraps page content with a smooth fade entrance animation.
+ * Avoids transforms on the page container so position: sticky works reliably.
  */
 export default function PageTransition({ children, className = "" }: PageTransitionProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!ref.current) return;
+    const el = ref.current;
+    if (!el) return;
 
-    // Kill any leftover tweens on this element
-    gsap.killTweensOf(ref.current);
+    gsap.killTweensOf(el);
 
     gsap.fromTo(
-      ref.current,
-      { opacity: 0, y: 24 },
+      el,
+      { opacity: 0 },
       {
         opacity: 1,
-        y: 0,
-        duration: 0.65,
-        ease: "power3.out",
-        clearProps: "transform",
+        duration: 0.45,
+        ease: "power2.out",
+        onComplete: () => {
+          if (el) {
+            el.style.opacity = "";
+            el.style.transform = "";
+          }
+        },
       }
     );
+
+    return () => {
+      if (el) {
+        gsap.killTweensOf(el);
+        el.style.opacity = "";
+        el.style.transform = "";
+      }
+    };
   }, []);
 
   return (
-    <div ref={ref} className={className} style={{ opacity: 0 }}>
+    <div ref={ref} className={className}>
       {children}
     </div>
   );

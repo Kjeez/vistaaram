@@ -190,9 +190,9 @@ export default function ProductDetail({
         <div className="flex flex-col lg:flex-row gap-8 xl:gap-12 items-start">
           
           {/* =================================================
-              GALLERY: THUMBNAILS + MAIN BIG IMAGE
+              GALLERY: THUMBNAILS + MAIN BIG IMAGE (STICKY)
           ================================================= */}
-          <div className="w-full lg:w-[56%] xl:w-[58%] flex flex-col">
+          <div className="w-full lg:w-[56%] xl:w-[58%] flex flex-col lg:sticky lg:top-[88px] self-start">
             <div className="flex flex-col lg:flex-row gap-4 xl:gap-5 items-stretch">
               
               {/* LEFT COLUMN — THUMBNAILS (110px) */}
