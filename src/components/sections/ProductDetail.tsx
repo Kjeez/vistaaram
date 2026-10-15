@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { productContent } from "@/data/content";
 import { useCart } from "@/context/CartContext";
@@ -92,13 +92,50 @@ function GiftIcon() {
   );
 }
 
-export default function ProductDetail() {
+export interface ProductDetailProps {
+  showBreadcrumb?: boolean;
+  showTopBorder?: boolean;
+  id?: string;
+}
+
+export default function ProductDetail({
+  showBreadcrumb = true,
+  showTopBorder = false,
+  id = "product",
+}: ProductDetailProps = {}) {
   const [selectedPack, setSelectedPack] = useState<ProductPackOption>(PACK_OPTIONS[0]);
   const [activeThumb, setActiveThumb] = useState(0);
   const [qty, setQty] = useState(1);
   const { addItem } = useCart();
   const router = useRouter();
   const images = productContent.images;
+  const thumbsRef = useRef<HTMLDivElement>(null);
+  const [thumbsHeight, setThumbsHeight] = useState<number | null>(606);
+
+  useEffect(() => {
+    const el = thumbsRef.current;
+    if (!el) return;
+
+    const updateHeight = () => {
+      if (window.innerWidth >= 1024) {
+        if (el.offsetHeight > 0) {
+          setThumbsHeight(el.offsetHeight);
+        }
+      } else {
+        setThumbsHeight(null);
+      }
+    };
+
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(el);
+    window.addEventListener("resize", updateHeight);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateHeight);
+    };
+  }, [images.length]);
 
   // Sync pack change with external components (e.g. StickyAddToCart)
   const handleSelectPack = (pack: ProductPackOption) => {
@@ -132,61 +169,89 @@ export default function ProductDetail() {
   };
 
   return (
-    <section className="relative w-full bg-[#FAF6EE] pt-8 lg:pt-12">
-      <div className="mx-auto max-w-[1360px] px-6 lg:px-12 pb-16">
+    <section id={id} className={`relative w-full bg-[#FAF6EE] ${showBreadcrumb ? "pt-8 lg:pt-12" : ""}`}>
+      {showTopBorder && (
+        <div className="relative w-full border-t border-[#E6DED2]">
+          <DiamondDecor />
+        </div>
+      )}
+
+      <div className={`mx-auto max-w-[1360px] px-6 lg:px-12 ${showBreadcrumb ? "pb-16" : "py-16"}`}>
         
         {/* Breadcrumb at the very top for desktop, or above image for mobile */}
-        <div className="flex items-center text-[13px] text-[#6B6259] mb-6">
-          <a href="/" className="hover:text-[#751E29] transition-colors">Home</a>
-          <span className="mx-2 text-[#C9A24B]">/</span>
-          <span className="text-[#4A423C] font-medium">{productContent.name}</span>
-        </div>
+        {showBreadcrumb && (
+          <div className="flex items-center text-[13px] text-[#6B6259] mb-6">
+            <a href="/" className="hover:text-[#751E29] transition-colors">Home</a>
+            <span className="mx-2 text-[#C9A24B]">/</span>
+            <span className="text-[#4A423C] font-medium">{productContent.name}</span>
+          </div>
+        )}
 
         <div className="flex flex-col lg:flex-row gap-8 xl:gap-12 items-start">
           
           {/* =================================================
-              LEFT COLUMN — THUMBNAILS (15%)
+              GALLERY: THUMBNAILS + MAIN BIG IMAGE
           ================================================= */}
-          
-          <div className="hidden lg:flex flex-col gap-[14px] w-[110px] shrink-0">
-            {images.map((img, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => setActiveThumb(i)}
-                className={`
-                  relative w-full aspect-square rounded-[8px] overflow-hidden 
-                  border transition-all duration-200 cursor-pointer
-                  ${i === activeThumb ? "border-[2px] border-[#C9A24B] shadow-sm p-0.5" : "border-[#E6DED2] hover:border-[#C9A24B]/50"}
-                `}
+          <div className="w-full lg:w-[56%] xl:w-[58%] flex flex-col">
+            <div className="flex flex-col lg:flex-row gap-4 xl:gap-5 items-stretch">
+              
+              {/* LEFT COLUMN — THUMBNAILS (110px) */}
+              <div 
+                ref={thumbsRef}
+                className="hidden lg:flex flex-col gap-[14px] w-[110px] shrink-0"
               >
-                <div className="relative w-full h-full rounded-[4px] overflow-hidden bg-white">
-                  <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="110px" />
-                </div>
-              </button>
-            ))}
-          </div>
+                {images.map((img, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setActiveThumb(i)}
+                    className={`
+                      relative w-full aspect-square rounded-[8px] overflow-hidden 
+                      border transition-all duration-200 cursor-pointer
+                      ${i === activeThumb ? "border-[2px] border-[#C9A24B] shadow-sm p-0.5" : "border-[#E6DED2] hover:border-[#C9A24B]/50"}
+                    `}
+                  >
+                    <div className="relative w-full h-full rounded-[4px] overflow-hidden bg-white">
+                      <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="110px" />
+                      {i === 4 && (
+                        <div className="absolute inset-0 bg-black/20 flex items-center justify-center pointer-events-none">
+                          <div className="w-7 h-7 rounded-full border border-white/80 bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                            <svg width="9" height="9" viewBox="0 0 24 24" fill="white">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
 
-          {/* =================================================
-              CENTER COLUMN — MAIN IMAGE (45%)
-          ================================================= */}
-          
-          <div className="w-full lg:w-[45%] flex flex-col items-center">
-            <div className="relative w-full aspect-square lg:aspect-auto lg:h-[606px] rounded-[16px] overflow-hidden border border-[#E6DED2] bg-white shadow-[0_4px_24px_rgba(60,35,20,0.04)]">
-              <Image 
-                src={images[activeThumb].src} 
-                alt={images[activeThumb].alt} 
-                fill 
-                className="object-cover" 
-                priority
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
+              {/* CENTER COLUMN — MAIN BIG IMAGE */}
+              <div className="flex-1 min-w-0 flex flex-col">
+                <div 
+                  className="relative w-full aspect-square lg:aspect-auto rounded-[16px] overflow-hidden border border-[#E6DED2] bg-white shadow-[0_4px_24px_rgba(60,35,20,0.04)]"
+                  style={thumbsHeight && thumbsHeight > 0 ? { height: `${thumbsHeight}px` } : { height: "606px" }}
+                >
+                  <Image 
+                    src={images[activeThumb].src} 
+                    alt={images[activeThumb].alt} 
+                    fill 
+                    className="object-cover" 
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </div>
+              </div>
+
             </div>
-            <div className="flex items-center gap-2 mt-4 text-[#756A63] text-[12px] font-medium">
+
+            {/* Desktop zoom hint */}
+            <div className="hidden lg:flex items-center justify-center gap-2 mt-4 text-[#756A63] text-[12px] font-medium">
               <SearchIcon />
               <span>Hover to zoom · Click to expand</span>
             </div>
-            
+
             {/* Mobile thumbnails (hidden on desktop) */}
             <div className="flex lg:hidden gap-3 mt-6 w-full overflow-x-auto pb-2 scrollbar-hide">
               {images.map((img, i) => (
@@ -201,16 +266,30 @@ export default function ProductDetail() {
                   `}
                 >
                   <Image src={img.src} alt={img.alt} fill className="object-cover" sizes="70px" />
+                  {i === 4 && (
+                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center pointer-events-none">
+                      <div className="w-5 h-5 rounded-full border border-white/80 bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                        <svg width="7" height="7" viewBox="0 0 24 24" fill="white">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
                 </button>
               ))}
+            </div>
+
+            {/* Mobile zoom hint */}
+            <div className="flex lg:hidden items-center justify-center gap-2 mt-3 text-[#756A63] text-[12px] font-medium">
+              <SearchIcon />
+              <span>Hover to zoom · Click to expand</span>
             </div>
           </div>
 
           {/* =================================================
-              RIGHT COLUMN — DETAILS (40%)
+              RIGHT COLUMN — DETAILS
           ================================================= */}
-          
-          <div className="w-full lg:w-[40%] flex flex-col pt-2 lg:pt-0 lg:pl-6">
+          <div className="w-full lg:w-[44%] xl:w-[42%] flex flex-col pt-2 lg:pt-0 lg:pl-4 xl:pl-6">
             
             {/* Eyebrow */}
             <p className="text-[#B48635] text-[11px] uppercase tracking-[0.24em] font-semibold mb-3">

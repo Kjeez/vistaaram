@@ -1,10 +1,9 @@
-import { CartProvider } from "@/context/CartContext";
 import Ticker from "@/components/sections/Ticker";
 import Navbar from "@/components/sections/Navbar";
 import HeroSlider from "@/components/sections/HeroSlider";
 import WhyVistaaram from "@/components/sections/WhyVistaaram";
 import PahadiDivider from "@/components/ui/PahadiDivider";
-import ProductPDP from "@/components/sections/ProductPDP";
+import ProductDetail from "@/components/sections/ProductDetail";
 import Process from "@/components/sections/Process";
 import PanditStory from "@/components/sections/PanditStory";
 import Rituals from "@/components/sections/Rituals";
@@ -22,7 +21,7 @@ export default function Home() {
       <main>
         <HeroSlider />
         <WhyVistaaram />
-        <ProductPDP />
+        <ProductDetail showBreadcrumb={false} showTopBorder={true} id="product" />
         <Process />
         <PahadiDivider className="py-4 bg-cream" />
         <PanditStory />
