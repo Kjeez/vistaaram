@@ -143,10 +143,10 @@ export default function Navbar() {
           <Link href="/" className="shrink-0 relative flex items-center h-full pt-1 pb-1" aria-label="Vistaaram Home">
             <Image
               src={navbarContent.logo}
-              alt="Vistaaram - From Devbhoomi Uttarakhand"
-              width={200}
-              height={55}
-              className="h-full w-auto object-contain py-1"
+              alt="Vistaaram"
+              width={252}
+              height={49}
+              className="h-7 sm:h-8 xl:h-9 w-auto object-contain"
               priority
             />
           </Link>

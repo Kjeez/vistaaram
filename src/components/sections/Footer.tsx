@@ -88,7 +88,7 @@ export default function Footer() {
           {/* Brand Column (Left) */}
           <div className="md:col-span-4 flex flex-col items-center text-center">
             <div className="mb-6">
-              <Image src="/images/logo.png" alt="Vistaaram Logo" width={240} height={80} className="object-contain filter brightness-[2] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" />
+              <Image src="/images/new_logo_white.png" alt="Vistaaram" width={252} height={49} className="h-10 w-auto object-contain" />
             </div>
             <p className="text-[14px] md:text-[15px] text-[#FAF6EE]/80 leading-relaxed font-body mb-8 max-w-[320px]">
               A Devotional Brand from Devbhoomi Uttarakhand — bringing the sacred purity, ancient traditions, and serene natural fragrances of Devbhoomi straight to your home.

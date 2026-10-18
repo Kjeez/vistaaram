@@ -147,7 +147,7 @@ export function openRazorpay(opts: {
       currency: sessionData.currency,
       name: "Vistaaram",
       description: "Natural Sambrani Hawan Cups",
-      image: "/images/logo.png",
+      image: "/images/new_logo.png",
       prefill: {
         name: `${address.firstName} ${address.lastName}`.trim(),
         email: address.email,

@@ -105,7 +105,7 @@ export const tickerContent: TickerItem[] = [
 /* ────────────── Navbar ────────────── */
 
 export const navbarContent = {
-  logo: "/images/logo.png",
+  logo: "/images/new_logo.png",
   links: [
     { label: "Shop", href: "/product/natural-sambrani-hawan-cup" },
     { label: "Our Story", href: "/story" },
