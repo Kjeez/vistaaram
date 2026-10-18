@@ -113,7 +113,7 @@ export const navbarContent = {
     { label: "Rituals", href: "/#rituals" },
     { label: "Reviews", href: "/#testimonials" },
   ],
-  whatsappLink: "https://wa.me/91XXXXXXXXXX",
+  whatsappLink: "https://wa.me/917819058084",
   taglineSide: { line1: "A SMALL RITUAL", line2: "A BRIGHTER", line3: "TOMORROW" },
 };
 
@@ -471,6 +471,8 @@ export const faqContent = {
 export const comingSoonContent = {
   sectionTitle: "Coming Soon",
   sectionSubtitle: "More sacred offerings from Devbhoomi",
+  notifyCta: "Notify me on WhatsApp",
+  notifyMessage: (product: string) => `Hi Vistaaram, please notify me when the ${product} launches.`,
   items: [
     {
       name: "Daily Puja Kit",
@@ -522,9 +524,9 @@ export const footerContent = {
     {
       title: "Contact",
       links: [
-        { label: "hello@vistaaram.in", href: "mailto:hello@vistaaram.in" },
+        { label: "contact@vistaaram.in", href: "mailto:contact@vistaaram.in" },
         { label: "Instagram", href: "https://instagram.com/vistaaram" },
-        { label: "WhatsApp", href: "https://wa.me/91XXXXXXXXXX" },
+        { label: "WhatsApp", href: "https://wa.me/917819058084" },
       ],
     },
   ] as FooterSection[],
@@ -582,7 +584,8 @@ export const ourStoryContent = {
     {
       name: "Pankaj Sati",
       role: "FOUNDER",
-      note: "Founder bio placeholder — replace this with the approved 2-3 line personal note.",
+      // TODO(owner): add the approved 2-3 line founder bio. Left empty so no placeholder text renders.
+      note: "",
       image: "/images/founder.jpg",
       instagram: "https://instagram.com/vistaaram"
     }
@@ -669,7 +672,7 @@ export const contactContent = {
       {
         type: "returns",
         title: "Returns & Refunds",
-        desc: "7-day easy returns, no questions asked.",
+        desc: "7-day easy returns on unused packs.",
         cta: "Learn more",
         href: "/returns",
       },
@@ -682,4 +685,363 @@ export const contactContent = {
       },
     ],
   },
+};
+
+/* ────────────── Business Details (legal) ────────────── */
+
+// TODO(owner): confirm every field below against your GST / business registration before
+// Razorpay live-mode review. Blank fields are hidden on the site — fill them, don't guess.
+//   - legalName / addressLines: currently what the site already shows; confirm they are the registered name + address.
+//   - gstin: add your GSTIN (shown in the footer and on policy pages once set).
+//   - grievanceOfficer: name of the Grievance Officer (Consumer Protection (E-Commerce) Rules, 2020).
+//   - jurisdictionCity: courts named in the Terms; confirm with your advisor.
+export const businessDetails = {
+  brand: "Vistaaram",
+  legalName: "Sati Enterprises",
+  addressLines: ["Sahastradhara Road", "Dehradun, Uttarakhand - 248013", "India"],
+  email: "contact@vistaaram.in",
+  phone: "+91 7819058084",
+  phoneHref: "tel:+917819058084",
+  whatsappNumber: "917819058084",
+  whatsappLink: "https://wa.me/917819058084",
+  supportHours: "Mon-Sat, 10 AM - 7 PM IST",
+  gstin: "",
+  grievanceOfficer: "",
+  jurisdictionCity: "Dehradun, Uttarakhand",
+};
+
+/* ────────────── Store Policies (shared facts) ────────────── */
+
+// Single source for the numbers the policy pages quote. Keep in sync with
+// CartContext (₹49 shipping, free from ₹499) and the PDP promises.
+export const storePolicy = {
+  dispatchTime: "within 24 hours",
+  deliveryTime: "3-5 business days",
+  shippingFee: 49,
+  freeShippingThreshold: 499,
+  returnWindowDays: 7,
+  // TODO(owner): confirm refund timeline with Razorpay / your bank.
+  refundTimeline: "5-7 business days",
+};
+
+/* ────────────── Policy Pages ────────────── */
+
+export interface PolicySection {
+  heading: string;
+  body?: string[];
+  bullets?: string[];
+}
+
+export interface PolicyPageContent {
+  metaTitle: string;
+  metaDescription: string;
+  eyebrow: string;
+  headline: string;
+  subline: string;
+  lastUpdated: string;
+  sections: PolicySection[];
+}
+
+const { email, phone, legalName, brand } = businessDetails;
+const { dispatchTime, deliveryTime, shippingFee, freeShippingThreshold, returnWindowDays, refundTimeline } = storePolicy;
+const POLICY_UPDATED = "18 October 2026";
+
+export const privacyContent: PolicyPageContent = {
+  metaTitle: "Privacy Policy — Vistaaram",
+  metaDescription:
+    "How Vistaaram collects, uses and protects your personal information when you shop natural sambrani hawan cups with us.",
+  eyebrow: "YOUR TRUST MATTERS",
+  headline: "Privacy Policy",
+  subline: "What we collect, why we collect it, and how we keep it safe.",
+  lastUpdated: POLICY_UPDATED,
+  sections: [
+    {
+      heading: "Who we are",
+      body: [
+        `This website (vistaaram.in) is operated by ${legalName} under the brand ${brand}. In this policy, "we", "us" and "our" refer to ${legalName}. By using our website or placing an order, you agree to this Privacy Policy.`,
+      ],
+    },
+    {
+      heading: "Information we collect",
+      bullets: [
+        "Order details: your name, phone number, email address, and shipping/billing address.",
+        "Messages you send us through the contact form, WhatsApp, email or phone.",
+        "Basic technical data such as browser type, device and pages visited, used to keep the site working and secure.",
+        "Your cart contents, stored in your browser so your cart is still there when you come back.",
+      ],
+    },
+    {
+      heading: "Payment information",
+      body: [
+        "Online payments (UPI, cards, net banking, wallets) are processed securely by Razorpay. Your card, UPI or bank details are entered on Razorpay's secure checkout and are never stored on our servers. We only receive a payment reference and status to confirm your order.",
+        "For Cash on Delivery orders, no payment details are collected online.",
+      ],
+    },
+    {
+      heading: "How we use your information",
+      bullets: [
+        "To process, ship and deliver your order, and to handle returns and refunds.",
+        "To send order updates by SMS, WhatsApp or email.",
+        "To reply to your questions and provide customer support.",
+        "To prevent fraud and comply with tax and legal requirements.",
+        "To send offers or launch updates only if you have asked for them. You can opt out anytime.",
+      ],
+    },
+    {
+      heading: "Who we share it with",
+      body: [
+        "We do not sell or rent your personal information. We share only what is needed to complete your order with:",
+      ],
+      bullets: [
+        "Razorpay, our payment gateway, for online payments.",
+        "Courier and logistics partners, who need your name, address and phone number to deliver.",
+        "Our e-commerce and hosting providers, who store order data on our behalf.",
+        "Government or law enforcement authorities, when required by law.",
+      ],
+    },
+    {
+      heading: "Cookies and local storage",
+      body: [
+        "We use your browser's local storage and essential cookies to remember your cart and keep checkout working. You can clear these from your browser settings at any time; your cart will be emptied if you do.",
+      ],
+    },
+    {
+      heading: "Data retention and security",
+      body: [
+        "We keep order records for as long as needed to fulfil your order and as required by Indian tax and accounting laws. We use reasonable technical and organisational measures to protect your data, but no method of transmission over the internet is completely secure.",
+      ],
+    },
+    {
+      heading: "Your choices",
+      body: [
+        `You can ask us to access, correct or delete your personal information, or to stop sending you marketing messages, by writing to ${email}. Some order records may need to be kept for legal reasons.`,
+      ],
+    },
+    {
+      heading: "Grievances and contact",
+      body: [
+        `For any privacy concern or grievance, contact us at ${email} or ${phone}. We will acknowledge your complaint within 48 hours and aim to resolve it within 30 days.`,
+        "We may update this policy from time to time. The latest version will always be on this page.",
+      ],
+    },
+  ],
+};
+
+export const termsContent: PolicyPageContent = {
+  metaTitle: "Terms & Conditions — Vistaaram",
+  metaDescription:
+    "Terms and conditions for buying Vistaaram natural sambrani hawan cups — orders, pricing, payment, COD, shipping and returns.",
+  eyebrow: "THE FINE PRINT",
+  headline: "Terms & Conditions",
+  subline: "Simple terms for shopping with Vistaaram.",
+  lastUpdated: POLICY_UPDATED,
+  sections: [
+    {
+      heading: "About these terms",
+      body: [
+        `These terms govern your use of vistaaram.in and any purchase you make from us. The website is operated by ${legalName} under the brand ${brand}. By using the website or placing an order, you agree to these terms.`,
+      ],
+    },
+    {
+      heading: "Products",
+      body: [
+        "Our sambrani hawan cups are handmade from natural ingredients, so colour, size and fragrance may vary slightly from batch to batch and from the photos on the website. Burn times are approximate.",
+        "Our products are meant for puja, hawan and home fragrance only. Light them on a heat-resistant surface, keep them away from children, pets and flammable materials, and never leave a burning cup unattended.",
+      ],
+    },
+    {
+      heading: "Prices and orders",
+      bullets: [
+        "All prices are in Indian Rupees (₹) and include applicable taxes unless stated otherwise.",
+        `Shipping is ₹${shippingFee} per order, and free on orders of ₹${freeShippingThreshold} or more.`,
+        "Placing an order is an offer to buy. We may cancel an order if a product is unavailable, if there is a pricing error, or if we suspect fraud. If you have already paid, you will get a full refund.",
+        "We currently deliver only within India.",
+      ],
+    },
+    {
+      heading: "Payment",
+      bullets: [
+        "Online payments (UPI, cards, net banking and wallets) are processed securely by Razorpay.",
+        "Cash on Delivery (COD) is available. Please keep the exact amount ready at delivery. We may restrict COD for some pincodes or orders.",
+        "Refusing a COD order at the doorstep without a valid reason may lead to COD being disabled for future orders.",
+      ],
+    },
+    {
+      heading: "Shipping, returns and refunds",
+      body: [
+        "Delivery timelines are explained in our Shipping Policy, and returns, cancellations and refunds in our Returns & Refund Policy. Both form part of these terms.",
+      ],
+    },
+    {
+      heading: "Intellectual property",
+      body: [
+        `All content on this website, including the ${brand} name, logo, photos and text, belongs to ${legalName} and may not be copied or used without our written permission.`,
+      ],
+    },
+    {
+      heading: "Limitation of liability",
+      body: [
+        "To the extent permitted by law, our total liability for any claim relating to an order is limited to the amount you paid for that order. We are not responsible for delays or failures caused by events outside our reasonable control, such as natural disasters, strikes or courier disruptions.",
+      ],
+    },
+    {
+      heading: "Governing law",
+      body: [
+        `These terms are governed by the laws of India. Any dispute will be subject to the courts of ${businessDetails.jurisdictionCity}.`,
+      ],
+    },
+    {
+      heading: "Contact",
+      body: [
+        `Questions about these terms? Write to ${email} or call ${phone}. We may update these terms from time to time; the latest version will always be on this page.`,
+      ],
+    },
+  ],
+};
+
+export const shippingContent: PolicyPageContent = {
+  metaTitle: "Shipping Policy — Vistaaram",
+  metaDescription: `Vistaaram ships ${dispatchTime} with delivery in ${deliveryTime} across India. ₹${shippingFee} shipping, free on orders of ₹${freeShippingThreshold}+. COD available.`,
+  eyebrow: "FROM DEVBHOOMI TO YOUR DOORSTEP",
+  headline: "Shipping Policy",
+  subline: "How and when your sambrani reaches you.",
+  lastUpdated: POLICY_UPDATED,
+  sections: [
+    {
+      heading: "Where we ship",
+      body: [
+        "We ship across India through trusted courier partners. We do not ship outside India at the moment.",
+      ],
+    },
+    {
+      heading: "Dispatch and delivery time",
+      bullets: [
+        `Orders are packed and dispatched ${dispatchTime} (excluding Sundays and public holidays).`,
+        `Delivery usually takes ${deliveryTime} after dispatch, depending on your location.`,
+        "Remote areas and the North-East may take a few extra days. Festivals, weather and courier disruptions can also cause delays; we will keep you posted.",
+      ],
+    },
+    {
+      heading: "Shipping charges",
+      bullets: [
+        `₹${shippingFee} per order for orders below ₹${freeShippingThreshold}.`,
+        `Free shipping on orders of ₹${freeShippingThreshold} or more.`,
+        "The shipping charge is shown in your cart before you pay.",
+      ],
+    },
+    {
+      heading: "Cash on Delivery",
+      body: [
+        "COD is available on most pincodes. Please pay the courier the order amount in cash at delivery.",
+      ],
+    },
+    {
+      heading: "Tracking your order",
+      body: [
+        "Once your order is dispatched, we send you a tracking link by SMS, WhatsApp or email. You can also visit our Track Order page or WhatsApp us your order number.",
+      ],
+    },
+    {
+      heading: "Damaged or missing parcels",
+      body: [
+        `If your parcel arrives damaged, opened or with items missing, please share photos or an unboxing video with us within 48 hours of delivery on WhatsApp or at ${email}. We will send a replacement or a full refund.`,
+      ],
+    },
+    {
+      heading: "Wrong address or failed delivery",
+      body: [
+        "Please double-check your address and phone number at checkout. If a parcel comes back to us because of an incorrect address or because the recipient was unavailable after repeated attempts, we can re-ship it once you pay the shipping charge again, or refund a prepaid order minus shipping charges.",
+      ],
+    },
+  ],
+};
+
+export const returnsContent: PolicyPageContent = {
+  metaTitle: "Returns & Refund Policy — Vistaaram",
+  metaDescription: `${returnWindowDays}-day easy returns on Vistaaram sambrani hawan cups. Cancellations, replacements and refunds for online and COD orders.`,
+  eyebrow: "SHOP WITH PEACE OF MIND",
+  headline: "Returns & Refund Policy",
+  subline: `${returnWindowDays}-day easy returns, cancellations and refunds — explained simply.`,
+  lastUpdated: POLICY_UPDATED,
+  sections: [
+    {
+      heading: `${returnWindowDays}-day returns`,
+      body: [
+        `You can request a return within ${returnWindowDays} days of delivery. Because our sambrani cups are burnt during use, we accept returns of packs that are unused and in their original packaging.`,
+      ],
+    },
+    {
+      heading: "Damaged, defective or wrong items",
+      body: [
+        `If you receive a damaged, defective or wrong product, tell us within ${returnWindowDays} days of delivery with photos (an unboxing video helps). We will send a free replacement or give you a full refund, including shipping — your choice.`,
+      ],
+    },
+    {
+      heading: "How to request a return",
+      bullets: [
+        `WhatsApp us or email ${email} with your order number and the reason for return.`,
+        "We will confirm within 24 hours and arrange a free reverse pickup where available. If pickup is not available at your pincode, we will share the address to send the item back to us.",
+        "Once we receive and check the item, we will process your refund or replacement.",
+      ],
+    },
+    {
+      heading: "Refunds",
+      bullets: [
+        `Prepaid (Razorpay) orders: refunded to your original payment method within ${refundTimeline} after we receive the returned item.`,
+        `COD orders: refunded by UPI or bank transfer to the details you share with us, within ${refundTimeline} after we receive the returned item.`,
+        "Original shipping charges are refunded only if the item was damaged, defective or wrong.",
+      ],
+    },
+    {
+      heading: "Cancellations",
+      bullets: [
+        "You can cancel your order free of charge before it is dispatched. WhatsApp or call us with your order number.",
+        "Once dispatched, the order cannot be cancelled, but you can return it under this policy.",
+        `Cancelled prepaid orders are refunded in full to the original payment method within ${refundTimeline}.`,
+      ],
+    },
+    {
+      heading: "Need help?",
+      body: [`WhatsApp us, call ${phone} or email ${email}. We are happy to help.`],
+    },
+  ],
+};
+
+/* ────────────── Track Order Page ────────────── */
+
+export const trackContent = {
+  metaTitle: "Track Your Order — Vistaaram",
+  metaDescription:
+    "Track your Vistaaram order. Enter your order number and phone number, or message us on WhatsApp for a status update.",
+  eyebrow: "WHERE IS MY SAMBRANI?",
+  headline: "Track Your Order",
+  subline:
+    "We send a tracking link by SMS/WhatsApp as soon as your order ships. Can't find it? Share your order number below and we'll reply with the latest status on WhatsApp.",
+  form: {
+    orderLabel: "Order number",
+    orderPlaceholder: "e.g. 1024",
+    phoneLabel: "Phone number used for the order",
+    phonePlaceholder: "10-digit mobile number",
+    cta: "GET STATUS ON WHATSAPP",
+    orderError: "Please enter your order number.",
+    phoneError: "Please enter a valid 10-digit mobile number.",
+  },
+  whatsappMessage: (order: string, mobile: string) =>
+    `Hi Vistaaram, please share the status of my order #${order}. Phone: ${mobile}`,
+  steps: [
+    { title: "Packed & dispatched", desc: `Usually ${dispatchTime} of your order.` },
+    { title: "Tracking link sent", desc: "By SMS, WhatsApp or email once it ships." },
+    { title: "Delivered", desc: `In ${deliveryTime} across India.` },
+  ],
+  helpTitle: "Prefer to talk?",
+};
+
+/* ────────────── PDP Pincode Check ────────────── */
+
+export const pincodeCheckContent = {
+  placeholder: "Enter delivery pincode",
+  cta: "Check",
+  invalid: "Please enter a valid 6-digit pincode.",
+  success: (pin: string) => `Delivers to ${pin} in ${storePolicy.deliveryTime} · COD available`,
+  promise: `COD available · Ships ${storePolicy.dispatchTime} · ${storePolicy.returnWindowDays}-day easy returns`,
 };

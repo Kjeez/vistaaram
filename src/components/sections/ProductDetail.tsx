@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { productContent } from "@/data/content";
+import Link from "next/link";
+import { pincodeCheckContent, productContent } from "@/data/content";
 import { useCart } from "@/context/CartContext";
 import { useRouter } from "next/navigation";
 import { PACK_OPTIONS, ProductPackOption } from "@/lib/medusa";
@@ -107,6 +108,8 @@ export default function ProductDetail({
   const [selectedPack, setSelectedPack] = useState<ProductPackOption>(PACK_OPTIONS[0]);
   const [activeThumb, setActiveThumb] = useState(0);
   const [qty, setQty] = useState(1);
+  const [pincode, setPincode] = useState("");
+  const [pincodeResult, setPincodeResult] = useState<{ ok: boolean; message: string } | null>(null);
   const { addItem } = useCart();
   const router = useRouter();
   const images = productContent.images;
@@ -147,8 +150,8 @@ export default function ProductDetail({
   };
 
   useEffect(() => {
-    const onExternalPackChange = (e: any) => {
-      const pack = PACK_OPTIONS.find((p) => p.id === e.detail);
+    const onExternalPackChange = (e: Event) => {
+      const pack = PACK_OPTIONS.find((p) => p.id === (e as CustomEvent).detail);
       if (pack) setSelectedPack(pack);
     };
     window.addEventListener("vistaaram:pack-change", onExternalPackChange);
@@ -182,7 +185,7 @@ export default function ProductDetail({
         {/* Breadcrumb at the very top for desktop, or above image for mobile */}
         {showBreadcrumb && (
           <div className="flex items-center text-[13px] text-[#6B6259] mb-6">
-            <a href="/" className="hover:text-[#751E29] transition-colors">Home</a>
+            <Link href="/" className="hover:text-[#751E29] transition-colors">Home</Link>
             <span className="mx-2 text-[#C9A24B]">/</span>
             <span className="text-[#4A423C] font-medium">{productContent.name}</span>
           </div>
@@ -460,21 +463,45 @@ export default function ProductDetail({
             
             {/* Pincode & Delivery Info */}
             <div className="flex flex-col gap-2.5 mb-7">
-              <div className="flex h-[46px] w-full max-w-[360px] rounded-[6px] overflow-hidden border border-[#E6DED2] bg-white">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  // Indian pincodes are 6 digits and never start with 0.
+                  setPincodeResult(
+                    /^[1-9]\d{5}$/.test(pincode)
+                      ? { ok: true, message: pincodeCheckContent.success(pincode) }
+                      : { ok: false, message: pincodeCheckContent.invalid }
+                  );
+                }}
+                className="flex h-[46px] w-full max-w-[360px] rounded-[6px] overflow-hidden border border-[#E6DED2] bg-white"
+              >
                 <div className="flex items-center justify-center pl-3 pr-2">
                   <MapPinIcon />
                 </div>
-                <input 
-                  type="text" 
-                  placeholder="Enter delivery pincode" 
-                  className="flex-1 text-[13px] text-[#4A423C] outline-none placeholder:text-[#A79C91]"
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={6}
+                  value={pincode}
+                  onChange={(e) => {
+                    setPincode(e.target.value.replace(/\D/g, ""));
+                    setPincodeResult(null);
+                  }}
+                  placeholder={pincodeCheckContent.placeholder}
+                  aria-label="Delivery pincode"
+                  className="flex-1 min-w-0 text-[13px] text-[#4A423C] outline-none placeholder:text-[#A79C91]"
                 />
-                <button className="bg-[#751E29] text-white text-[13px] font-semibold px-6 hover:bg-[#5E1620] transition-colors">
-                  Check
+                <button type="submit" className="bg-[#751E29] text-white text-[13px] font-semibold px-6 hover:bg-[#5E1620] transition-colors">
+                  {pincodeCheckContent.cta}
                 </button>
-              </div>
+              </form>
+              {pincodeResult && (
+                <p role="status" className={`text-[12px] font-medium ${pincodeResult.ok ? "text-[#2E7D32]" : "text-[#B3261E]"}`}>
+                  {pincodeResult.message}
+                </p>
+              )}
               <p className="text-[#756A63] text-[12px]">
-                COD available · Ships in 24 hrs · Free returns
+                {pincodeCheckContent.promise}
               </p>
             </div>
             
