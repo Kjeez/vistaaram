@@ -93,7 +93,26 @@ export const medusa = new Medusa({
   baseUrl: MEDUSA_BACKEND_URL,
   debug: process.env.NODE_ENV === "development",
   publishableKey: MEDUSA_PUBLISHABLE_KEY,
+  // Customer sessions are a JWT kept in localStorage and sent as a bearer token.
+  auth: { type: "jwt", jwtTokenStorageMethod: "local" },
 })
+
+/** Medusa handle of the sambrani cup product (see backend seed-vistaaram.ts). */
+export const PRODUCT_HANDLE = "sambrani-cup"
+
+let productIdPromise: Promise<string | null> | null = null
+
+/** Resolves the Medusa product id behind the storefront's single product page. */
+export function getProductId(): Promise<string | null> {
+  productIdPromise ??= medusa.store.product
+    .list({ handle: PRODUCT_HANDLE, fields: "id" })
+    .then(({ products }) => products[0]?.id ?? null)
+    .catch(() => {
+      productIdPromise = null;
+      return null;
+    });
+  return productIdPromise;
+}
 
 export default medusa
 

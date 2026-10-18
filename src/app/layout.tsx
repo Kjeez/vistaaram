@@ -42,6 +42,7 @@ export const metadata: Metadata = {
 };
 
 import { CartProvider } from "@/context/CartContext";
+import { CustomerProvider } from "@/context/CustomerContext";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -51,8 +52,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="min-h-full flex flex-col bg-cream text-ink font-body">
         <CartProvider>
-          <ScrollToTop />
-          {children}
+          <CustomerProvider>
+            <ScrollToTop />
+            {children}
+          </CustomerProvider>
         </CartProvider>
       </body>
     </html>

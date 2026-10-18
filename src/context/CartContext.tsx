@@ -31,6 +31,7 @@ interface CartContextType {
   coupon: string;
   applyCoupon: (code: string) => Promise<{ success: boolean; message: string }>;
   removeCoupon: () => Promise<void>;
+  resetCart: () => void;
   count: number;
   isLoading: boolean;
 }
@@ -53,6 +54,7 @@ const CartContext = createContext<CartContextType>({
   coupon: "",
   applyCoupon: async () => ({ success: false, message: "" }),
   removeCoupon: async () => {},
+  resetCart: () => {},
   count: 0,
   isLoading: false,
 });
@@ -489,6 +491,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Forget the completed cart; a fresh one is created on the next add.
+  const resetCart = useCallback(() => {
+    try {
+      localStorage.removeItem(LOCAL_STORAGE_CART_ID);
+      localStorage.removeItem(LOCAL_STORAGE_CART_ITEMS);
+    } catch {}
+    setCartId(null);
+    setItems([]);
+    setCoupon("");
+    setDiscount(0);
+    setTax(0);
+    recalcTotals([], 0);
+  }, [recalcTotals]);
+
   const count = items.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
@@ -508,6 +524,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         coupon,
         applyCoupon,
         removeCoupon,
+        resetCart,
         count,
         isLoading,
       }}

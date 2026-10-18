@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import { navbarContent } from "@/data/content";
 import { useCart } from "@/context/CartContext";
+import { useCustomer } from "@/context/CustomerContext";
 import Link from "next/link";
 
 /* ── SVG Icon Components ────────────────────────────── */
@@ -43,6 +44,24 @@ function CartIcon({ className = "" }: { className?: string }) {
       <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
       <line x1="3" y1="6" x2="21" y2="6" />
       <path d="M16 10a4 4 0 01-8 0" />
+    </svg>
+  );
+}
+
+function UserIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`w-[22px] h-[22px] ${className}`}
+    >
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" />
     </svg>
   );
 }
@@ -98,6 +117,8 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { count } = useCart();
+  const { customer } = useCustomer();
+  const accountHref = customer ? "/account" : "/account/login";
   const navRef = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -170,6 +191,15 @@ export default function Navbar() {
             >
               <SearchIcon />
             </button>
+
+            {/* Account */}
+            <Link
+              href={accountHref}
+              className="p-1 hover:text-maroon transition-colors duration-200 cursor-pointer text-maroon-dark"
+              aria-label={customer ? "My account" : "Log in"}
+            >
+              <UserIcon />
+            </Link>
 
             {/* Cart */}
             <Link
@@ -263,6 +293,16 @@ export default function Navbar() {
 
             {/* Bottom section */}
             <div className="mt-auto space-y-6">
+              {/* Account */}
+              <Link
+                href={accountHref}
+                onClick={handleNavClick}
+                className="flex items-center gap-3 text-base font-medium text-maroon-dark"
+              >
+                <UserIcon />
+                <span>{customer ? "My account" : "Log in / Sign up"}</span>
+              </Link>
+
               {/* WhatsApp */}
               <a
                 href={navbarContent.whatsappLink}

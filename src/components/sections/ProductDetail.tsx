@@ -6,6 +6,7 @@ import { productContent } from "@/data/content";
 import { useCart } from "@/context/CartContext";
 import { useRouter } from "next/navigation";
 import { PACK_OPTIONS, ProductPackOption } from "@/lib/medusa";
+import WishlistButton from "@/components/ui/WishlistButton";
 
 /* =========================================================
    ICONS
@@ -502,6 +503,8 @@ export default function ProductDetail({
                 <CartIcon />
                 ADD TO CART — ₹{selectedPack.price * qty}
               </button>
+
+              <WishlistButton />
             </div>
             
             {/* Trust Badges */}
