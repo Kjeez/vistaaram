@@ -95,9 +95,11 @@ export default function Founders() {
                   <div className="w-10 h-[1.5px] bg-[#C9A24B]/40 rounded-full mb-5" />
 
                   {/* Bio note */}
-                  <p className="text-[#6B6259] text-[15px] md:text-[16px] leading-[1.8] mb-8 max-w-[380px]">
-                    {founder.note}
-                  </p>
+                  {founder.note && (
+                    <p className="text-[#6B6259] text-[15px] md:text-[16px] leading-[1.8] mb-8 max-w-[380px]">
+                      {founder.note}
+                    </p>
+                  )}
 
                   {/* Instagram CTA */}
                   <a

@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { comingSoonContent } from "@/data/content";
+import { businessDetails, comingSoonContent } from "@/data/content";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -124,27 +124,16 @@ export default function ComingSoon() {
                   </div>
                 )}
 
-                {/* Email Capture */}
+                {/* Launch notify — opens WhatsApp with a prefilled message */}
                 <div className="w-full mt-auto">
-                  <form className="relative flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <svg className="w-5 h-5 text-[#C9A24B]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                      </div>
-                      <input 
-                        type="email" 
-                        placeholder="Enter your email address" 
-                        className="w-full bg-[#FAF6EE] border border-[#C9A24B]/40 rounded-[12px] pl-12 pr-4 py-3.5 text-sm focus:outline-none focus:border-[#7A1F2B] transition-colors text-[#625A54] placeholder-[#C9A24B]/70 font-medium"
-                        required
-                      />
-                    </div>
-                    <button 
-                      type="submit"
-                      className="w-full bg-[#7A1F2B] hover:bg-[#5A1520] text-white font-bold text-[13px] tracking-wide py-3.5 rounded-[12px] transition-colors flex items-center justify-center gap-2"
-                    >
-                      Get 10% off at launch <span>→</span>
-                    </button>
-                  </form>
+                  <a
+                    href={`https://wa.me/${businessDetails.whatsappNumber}?text=${encodeURIComponent(comingSoonContent.notifyMessage(item.name))}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-[#7A1F2B] hover:bg-[#5A1520] text-white font-bold text-[13px] tracking-wide py-3.5 rounded-[12px] transition-colors flex items-center justify-center gap-2"
+                  >
+                    {comingSoonContent.notifyCta} <span>→</span>
+                  </a>
                 </div>
               </div>
             </div>
