@@ -463,6 +463,34 @@ export const faqContent = {
       question: "What is the shelf life?",
       answer: "Best before 18 months from manufacturing; store in a cool, dry place.",
     },
+    {
+      question: "Is Cash on Delivery available?",
+      answer: "Yes. Choose Cash on Delivery at checkout and pay the courier when your order arrives. There is no extra COD fee.",
+    },
+    {
+      question: "Do I need an account to order?",
+      answer: "No, you can check out as a guest. With a free account (email or Google sign-in) you can track orders, save addresses, keep a wishlist and check out faster.",
+    },
+    {
+      question: "How do I track my order?",
+      answer: "We send a tracking link by SMS/WhatsApp once your order ships. You can also see order status under My Orders in your account, use our Track Order page, or WhatsApp us your order number.",
+    },
+    {
+      question: "I ordered as a guest. Can I see that order in my account?",
+      answer: "Yes. Sign up with the same email you used at checkout and tap “Find my past orders” under My Orders. With Google sign-in it is added instantly; otherwise we email you a link to confirm.",
+    },
+    {
+      question: "What is your return policy?",
+      answer: "We offer 7-day easy returns on unused packs. Request a return from My Orders (or WhatsApp us) and we arrange a free pickup where available. Damaged or wrong items are replaced or refunded.",
+    },
+    {
+      question: "How do refunds work for Cash on Delivery orders?",
+      answer: "Once we receive the returned item, we refund COD orders by UPI or bank transfer within 5–7 business days.",
+    },
+    {
+      question: "Do you take bulk orders for temples or events?",
+      answer: "Yes. Message us on WhatsApp or through the Contact page with the quantity and date, and we will share bulk pricing.",
+    },
   ] as FAQ[],
 };
 
@@ -510,6 +538,8 @@ export const footerContent = {
         { label: "Shop", href: "/product/natural-sambrani-hawan-cup" },
         { label: "Our Story", href: "/story" },
         { label: "FAQ", href: "/#faq" },
+        { label: "Track Order", href: "/track" },
+        { label: "Contact Us", href: "/contact" },
       ],
     },
     {

@@ -9,15 +9,16 @@ import OrderSummary from "@/components/cart/OrderSummary";
 import CartEmptyState from "@/components/cart/CartEmptyState";
 import CartBeforeYouGo from "@/components/cart/CartBeforeYouGo";
 import { useCart } from "@/context/CartContext";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 export default function CartPage() {
   const { items, subtotal, count } = useCart();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // The cart lives in localStorage, so render only on the client to avoid a hydration mismatch.
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   const FREE_SHIPPING_THRESHOLD = 499;
   const amountAway = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
@@ -56,10 +57,10 @@ export default function CartPage() {
               <div className="w-full max-w-[800px] mx-auto mb-10 md:mb-14">
                 <div className="flex justify-center mb-3 text-[13px] md:text-[14px] font-medium">
                   {hasFreeShipping ? (
-                    <span className="text-[#C9A24B]">🎉 You've unlocked FREE shipping!</span>
+                    <span className="text-[#C9A24B]">🎉 You&apos;ve unlocked FREE shipping!</span>
                   ) : (
                     <span className="text-[#751E29]">
-                      You're <span className="font-bold">₹{amountAway}</span> away from FREE shipping
+                      You&apos;re <span className="font-bold">₹{amountAway}</span> away from FREE shipping
                     </span>
                   )}
                 </div>

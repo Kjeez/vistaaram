@@ -11,24 +11,6 @@ import Link from "next/link";
 
 /* ── SVG Icon Components ────────────────────────────── */
 
-function SearchIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`w-[22px] h-[22px] ${className}`}
-    >
-      <circle cx="11" cy="11" r="8" />
-      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-    </svg>
-  );
-}
-
 function CartIcon({ className = "" }: { className?: string }) {
   return (
     <svg
@@ -153,7 +135,7 @@ export default function Navbar() {
     <>
       <nav
         ref={navRef}
-        className={`sticky top-0 z-50 w-full bg-cream h-[72px] px-[48px] lg:px-[96px] transition-shadow duration-300 ${scrolled ? "shadow-[0_2px_15px_rgba(43,15,20,0.06)]" : ""
+        className={`sticky top-0 z-50 w-full bg-cream h-[64px] sm:h-[72px] px-4 sm:px-8 lg:px-12 xl:px-[96px] transition-shadow duration-300 ${scrolled ? "shadow-[0_2px_15px_rgba(43,15,20,0.06)]" : ""
           }`}
       >
         <div className="w-full h-full mx-auto flex items-center justify-between">
@@ -170,7 +152,7 @@ export default function Navbar() {
           </Link>
 
           {/* ── Center: Nav Links (desktop only) ── */}
-          <div className="hidden lg:flex items-center gap-10">
+          <div className="hidden lg:flex items-center gap-6 xl:gap-10">
             {navbarContent.links.map((link) => (
               <Link
                 key={link.label}
@@ -183,19 +165,12 @@ export default function Navbar() {
           </div>
 
           {/* ── Right: Icons & Tagline ── */}
-          <div className="flex items-center gap-5">
-            {/* Search */}
-            <button
-              className="p-1 hover:text-maroon transition-colors duration-200 cursor-pointer text-maroon-dark"
-              aria-label="Search"
-            >
-              <SearchIcon />
-            </button>
+          <div className="flex items-center gap-2 sm:gap-4 xl:gap-5">
 
             {/* Account */}
             <Link
               href={accountHref}
-              className="p-1 hover:text-maroon transition-colors duration-200 cursor-pointer text-maroon-dark"
+              className="p-2 hover:text-maroon transition-colors duration-200 cursor-pointer text-maroon-dark"
               aria-label={customer ? "My account" : "Log in"}
             >
               <UserIcon />
@@ -204,21 +179,21 @@ export default function Navbar() {
             {/* Cart */}
             <Link
               href="/cart"
-              className="relative p-1 hover:text-maroon transition-colors duration-200 cursor-pointer text-maroon-dark"
+              className="relative p-2 hover:text-maroon transition-colors duration-200 cursor-pointer text-maroon-dark"
               aria-label={`Cart (${count} items)`}
             >
               <CartIcon />
               {/* Count badge */}
-              <span className="absolute top-0 -right-1.5 min-w-4 h-4 flex items-center justify-center rounded-full bg-maroon-dark text-white text-[10px] font-bold leading-none px-1 border border-cream">
+              <span className="absolute top-0.5 -right-0.5 min-w-4 h-4 flex items-center justify-center rounded-full bg-maroon-dark text-white text-[10px] font-bold leading-none px-1 border border-cream">
                 {count}
               </span>
             </Link>
 
             {/* First Divider */}
-            <div className="hidden lg:block w-px h-8 bg-[#E5DCC5] mx-1" />
+            <div className="hidden xl:block w-px h-8 bg-[#E5DCC5] mx-1" />
 
             {/* Tagline */}
-            <div className="hidden lg:block text-left leading-[1.2]">
+            <div className="hidden xl:block text-left leading-[1.2]">
               <div className="text-[9px] tracking-[0.1em] text-gold-light font-semibold uppercase">
                 {navbarContent.taglineSide.line1}
               </div>
@@ -231,16 +206,16 @@ export default function Navbar() {
             </div>
 
             {/* Second Divider */}
-            <div className="hidden lg:block w-px h-8 bg-[#E5DCC5] mx-1" />
+            <div className="hidden xl:block w-px h-8 bg-[#E5DCC5] mx-1" />
 
             {/* Om Icon */}
-            <div className="hidden lg:block">
+            <div className="hidden xl:block">
               <OmIcon className="text-gold" />
             </div>
 
             {/* Hamburger (mobile/tablet) */}
             <button
-              className="lg:hidden p-2 rounded-full hover:bg-maroon/5 transition-colors duration-200 cursor-pointer ml-1"
+              className="lg:hidden p-2 -mr-2 rounded-full hover:bg-maroon/5 transition-colors duration-200 cursor-pointer"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileOpen}

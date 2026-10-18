@@ -31,7 +31,7 @@ function PlayIcon() {
 const reelsData = [
   { 
     id: 1, 
-    image: "/images/product-5.jpg", 
+    image: "/images/product/1.jpg", 
     sticker: { text: "Finally received\nour final product\npackaging ✅", bg: "bg-[#0055FF]", rotate: "-rotate-2" },
     hasPlay: false 
   },
@@ -43,13 +43,13 @@ const reelsData = [
   },
   { 
     id: 3, 
-    image: "/images/product-3.jpg", 
+    image: "/images/product/3.jpg", 
     sticker: null,
     hasPlay: false 
   },
   { 
     id: 4, 
-    image: "/images/process-3.jpg", 
+    image: "/images/process_step_3.jpg", 
     sticker: { text: "Why Every\nStep Matters", bg: "bg-[#0055FF]", rotate: "rotate-2" },
     hasPlay: false 
   },

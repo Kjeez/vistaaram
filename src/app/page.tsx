@@ -12,10 +12,26 @@ import StoriesCarousel from "@/components/sections/StoriesCarousel";
 import FAQ from "@/components/sections/FAQ";
 import ComingSoon from "@/components/sections/ComingSoon";
 import Footer from "@/components/sections/Footer";
+import { faqContent } from "@/data/content";
+
+// FAQ rich results in Google; mirrors the questions rendered by <FAQ />.
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqContent.faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: { "@type": "Answer", text: faq.answer },
+  })),
+};
 
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c") }}
+      />
       <Ticker />
       <Navbar />
       <main>

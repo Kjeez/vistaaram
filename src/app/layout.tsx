@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import ScrollToTop from "@/components/ui/ScrollToTop";
+import { SITE_URL } from "@/lib/site";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair-display",
@@ -17,6 +18,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  alternates: { canonical: "/" },
   title: "Vistaaram — Natural Sambrani Hawan Cup from Devbhoomi, Uttarakhand",
   description:
     "Experience divine fragrance with Vistaaram's 100% natural Sambrani Hawan Cup. Handcrafted in Uttarakhand with temple flowers, cow dung, and sacred herbs. Charcoal-free, chemical-free. ₹279.",
@@ -37,7 +40,15 @@ export const metadata: Metadata = {
       "100% natural, charcoal-free Sambrani cups handcrafted in Devbhoomi Uttarakhand.",
     siteName: "Vistaaram",
     type: "website",
-    url: "https://vistaaram.in",
+    locale: "en_IN",
+    url: "/",
+    images: [{ url: "/images/product/1.jpg", alt: "Vistaaram Natural Sambrani Hawan Cups" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vistaaram — Natural Sambrani Hawan Cup",
+    description: "100% natural, charcoal-free Sambrani cups handcrafted in Devbhoomi Uttarakhand.",
+    images: ["/images/product/1.jpg"],
   },
 };
 

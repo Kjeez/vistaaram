@@ -36,6 +36,9 @@ interface CartContextType {
   isLoading: boolean;
 }
 
+type MedusaCart = Awaited<ReturnType<typeof medusa.store.cart.retrieve>>["cart"];
+type MedusaLineItem = NonNullable<MedusaCart["items"]>[number];
+
 const LOCAL_STORAGE_CART_ID = "vistaaram_medusa_cart_id";
 const LOCAL_STORAGE_CART_ITEMS = "vistaaram_cart_items_cache";
 
@@ -89,7 +92,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [discount]);
 
   // Helper to map Medusa cart to local state
-  const syncWithMedusaCart = useCallback((medusaCart: any) => {
+  const syncWithMedusaCart = useCallback((medusaCart: MedusaCart) => {
     if (!medusaCart) return;
 
     setCartId(medusaCart.id);
@@ -98,7 +101,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
 
     if (Array.isArray(medusaCart.items)) {
-      const mappedItems: CartItem[] = medusaCart.items.map((lineItem: any) => {
+      const mappedItems: CartItem[] = medusaCart.items.map((lineItem: MedusaLineItem) => {
         const isBox4 =
           lineItem.variant_id === VISTAARAM_VARIANTS.BOX_4 ||
           lineItem.title?.includes("4 Boxes") ||
@@ -201,51 +204,36 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let isMounted = true;
 
-    // 1. Immediately hydrate from local storage cache to avoid blank flash
-    try {
-      const cached = localStorage.getItem(LOCAL_STORAGE_CART_ITEMS);
-      if (cached) {
-        const parsed: CartItem[] = JSON.parse(cached);
+    // 2. Sync with Medusa server in background. A cart is only created on the first
+    // add-to-cart (see getOrCreateCartId), so browsing visitors and bots don't leave
+    // empty carts behind.
+    const init = async () => {
+      // 1. Hydrate from the local cache first to avoid a blank cart flash.
+      try {
+        const cached = localStorage.getItem(LOCAL_STORAGE_CART_ITEMS);
+        const parsed: CartItem[] = cached ? JSON.parse(cached) : [];
         if (Array.isArray(parsed) && parsed.length > 0) {
           setItems(parsed);
           recalcTotals(parsed);
         }
-      }
-    } catch {}
+      } catch {}
 
-    // 2. Sync with Medusa server in background
-    const init = async () => {
       const savedCartId = localStorage.getItem(LOCAL_STORAGE_CART_ID);
-      if (savedCartId) {
-        try {
-          setIsLoading(true);
-          const { cart } = await medusa.store.cart.retrieve(savedCartId, {
-            fields: "*items,*items.variant,*promotions",
-          });
-          if (isMounted && cart && !cart.completed_at) {
-            syncWithMedusaCart(cart);
-            return;
-          }
-        } catch {
-          // If expired, clear
-          localStorage.removeItem(LOCAL_STORAGE_CART_ID);
-        } finally {
-          if (isMounted) setIsLoading(false);
-        }
-      }
-
-      // If no valid cart exists on server, create one
+      if (!savedCartId) return;
       try {
         setIsLoading(true);
-        const { cart } = await medusa.store.cart.create({
-          region_id: INDIA_REGION_ID,
+        const { cart } = await medusa.store.cart.retrieve(savedCartId, {
+          fields: "*items,*items.variant,*promotions",
         });
-        if (isMounted && cart) {
-          localStorage.setItem(LOCAL_STORAGE_CART_ID, cart.id);
-          setCartId(cart.id);
+        if (!isMounted) return;
+        if (cart && !cart.completed_at) {
+          syncWithMedusaCart(cart);
+        } else {
+          localStorage.removeItem(LOCAL_STORAGE_CART_ID);
         }
-      } catch (err) {
-        console.warn("Could not initialize Medusa cart:", err);
+      } catch {
+        // Expired or unknown cart: forget it; the next add-to-cart starts a fresh one.
+        localStorage.removeItem(LOCAL_STORAGE_CART_ID);
       } finally {
         if (isMounted) setIsLoading(false);
       }
@@ -441,7 +429,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         };
       }
       return { success: false, message: "Invalid coupon code." };
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Local fallback for WELCOME8 (8% above ₹999) if backend offline
       if (cleanCode === "WELCOME8") {
         if (subtotal >= 999) {
@@ -458,8 +446,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }
       }
       const errorMsg =
-        err?.message ||
-        err?.body?.message ||
+        (err instanceof Error && err.message) ||
         "Could not apply coupon. Check minimum order requirements.";
       return { success: false, message: errorMsg };
     } finally {

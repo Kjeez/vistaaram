@@ -430,13 +430,15 @@ export default function ProductDetail({
                             isSelected ? "text-[#751E29]" : "text-[#4A423C]"
                           }`}
                         >
-                          {pack.name}
+                          {/* Narrow phones fit "1 Box" but not "Pack of 1" in a third of the width. */}
+                          <span className="sm:hidden">{pack.shortTitle}</span>
+                          <span className="hidden sm:inline">{pack.name}</span>
                         </span>
                       </div>
 
                       {/* Cups & Boxes subtitle */}
                       <div className="text-[11px] text-[#756A63] pl-5.5 sm:pl-6 mb-2">
-                        {pack.cups} Cups · {pack.shortTitle}
+                        {pack.cups} Cups<span className="hidden sm:inline"> · {pack.shortTitle}</span>
                       </div>
 
                       {/* Pricing & strike */}
@@ -505,8 +507,8 @@ export default function ProductDetail({
               </p>
             </div>
             
-            {/* Add to Cart Actions */}
-            <div className="flex items-center gap-4 mb-3">
+            {/* Add to Cart Actions — on phones the button takes its own full-width row */}
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 sm:gap-4 mb-3">
               <div className="flex items-center justify-between border border-[#E6DED2] bg-white rounded-full h-[52px] w-[110px] px-2 shrink-0">
                 <button 
                   onClick={() => setQty(Math.max(1, qty - 1))}
@@ -525,13 +527,13 @@ export default function ProductDetail({
               
               <button 
                 onClick={handleAddToCart}
-                className="flex-1 h-[52px] rounded-full bg-[#751E29] text-[#FAF6EE] text-[13px] font-semibold tracking-[0.1em] uppercase flex items-center justify-center gap-3 shadow-[0_6px_18px_rgba(117,30,41,0.2)] hover:bg-[#5E1620] transition-all"
+                className="order-last sm:order-none basis-full sm:basis-auto flex-1 h-[52px] rounded-full bg-[#751E29] text-[#FAF6EE] text-[13px] font-semibold tracking-[0.1em] uppercase flex items-center justify-center gap-3 shadow-[0_6px_18px_rgba(117,30,41,0.2)] hover:bg-[#5E1620] transition-all"
               >
                 <CartIcon />
                 ADD TO CART — ₹{selectedPack.price * qty}
               </button>
 
-              <WishlistButton />
+              <WishlistButton className="ml-auto sm:ml-0" />
             </div>
             
             {/* Trust Badges */}

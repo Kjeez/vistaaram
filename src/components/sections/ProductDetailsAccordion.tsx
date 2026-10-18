@@ -1,9 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { productContent } from "@/data/content";
-import Head from "next/head";
-import Script from "next/script";
 
 function PlusIcon() {
   return (
@@ -74,37 +71,10 @@ export default function ProductDetailsAccordion() {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const jsonLd = {
-    "@context": "https://schema.org/",
-    "@type": "Product",
-    "name": productContent.name,
-    "image": productContent.images[0].src,
-    "description": productContent.description,
-    "brand": {
-      "@type": "Brand",
-      "name": "Vistaaram"
-    },
-    "offers": {
-      "@type": "Offer",
-      "url": "https://vistaaram.in/product/natural-sambrani-hawan-cup",
-      "priceCurrency": "INR",
-      "price": "279",
-      "availability": "https://schema.org/InStock",
-      "itemCondition": "https://schema.org/NewCondition"
-    },
-    // "aggregateRating": {
-    //   "@type": "AggregateRating",
-    //   "ratingValue": "4.8",
-    //   "reviewCount": "100"
-    // }
-  };
 
   return (
     <section className="relative w-full bg-[#FAF6EE] py-16">
       
-      <Script id="product-jsonld" type="application/ld+json" strategy="lazyOnload">
-        {JSON.stringify(jsonLd)}
-      </Script>
 
       <div className="mx-auto max-w-[800px] px-6">
         

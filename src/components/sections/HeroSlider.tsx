@@ -294,7 +294,8 @@ export default function HeroSlider() {
         className="
           relative
           w-full
-          h-[680px]
+          h-[320px]
+          sm:h-[440px]
           lg:h-[640px]
           xl:h-[640px]
           overflow-hidden
@@ -341,10 +342,7 @@ export default function HeroSlider() {
                   )}
                   fill
                   priority={index === 0}
-                  sizes="
-                    (max-width: 1024px) 100vw,
-                    56vw
-                  "
+                  sizes="(max-width: 1024px) 100vw, 56vw"
                   className="
                     object-cover
                     object-center
@@ -415,7 +413,8 @@ export default function HeroSlider() {
             lg:w-[44%]
             bg-[#FAF6EE]
             z-[4]
-            flex
+            hidden
+            lg:flex
             items-center
           "
         >

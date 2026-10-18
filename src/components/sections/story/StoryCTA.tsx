@@ -8,9 +8,10 @@ function PatternOverlay() {
   return (
     <div className="absolute inset-0 w-full h-full opacity-10 pointer-events-none mix-blend-overlay">
       <Image 
-        src="/images/mandala-bg.png" 
-        alt="Mandala Pattern" 
-        fill 
+        src="/images/circle_design.png"
+        alt=""
+        fill
+        sizes="100vw"
         className="object-cover"
       />
     </div>

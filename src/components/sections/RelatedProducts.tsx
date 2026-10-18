@@ -1,6 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/context/CartContext";
+import { PACK_OPTIONS } from "@/lib/medusa";
+import { businessDetails, comingSoonContent, productContent } from "@/data/content";
 
 function LotusIcon() {
   return (
@@ -34,25 +38,17 @@ function BellIcon() {
   );
 }
 
-function StarIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="#C9A24B">
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-    </svg>
-  );
-}
+const pack2 = PACK_OPTIONS.find((p) => p.boxes === 2)!;
 
 const relatedProducts = [
   {
     id: 1,
     title: "Value Pack",
-    desc: "2 Boxes, Save 10%",
-    image: "/images/product-4.jpg",
-    price: 502,
-    originalPrice: 558,
+    desc: `${pack2.shortTitle} · ${pack2.cups} Cups · Save ${pack2.savingsPercent}%`,
+    image: "/images/product/2.jpg",
+    price: pack2.price,
+    originalPrice: pack2.mrp,
     status: "available",
-    rating: 4.8,
-    reviews: 120,
     cta: "Add Bundle",
     badge: "",
   },
@@ -62,6 +58,7 @@ const relatedProducts = [
     desc: "Sandalwood, Kapoor, Ghee Wicks & More",
     image: "/images/coming-soon-1.jpg",
     price: null,
+    originalPrice: null,
     status: "coming_soon",
     cta: "Notify Me",
     badge: "Coming Soon",
@@ -72,6 +69,7 @@ const relatedProducts = [
     desc: "A Beautiful Gift for Your Loved Ones",
     image: "/images/coming-soon-3.jpg",
     price: null,
+    originalPrice: null,
     status: "coming_soon",
     cta: "Notify Me",
     badge: "Coming Soon",
@@ -79,6 +77,23 @@ const relatedProducts = [
 ];
 
 export default function RelatedProducts() {
+  const { addItem } = useCart();
+  const router = useRouter();
+
+  const handleAddBundle = async () => {
+    await addItem({
+      id: pack2.id,
+      variantId: pack2.variantId,
+      name: `${productContent.name} — ${pack2.name}`,
+      price: pack2.price,
+      originalPrice: pack2.mrp,
+      quantity: 1,
+      image: productContent.images[0].src,
+      subtitle: `${pack2.ratePerBox} · ${pack2.cups} Cups`,
+    });
+    router.push("/cart");
+  };
+
   return (
     <section className="relative w-full bg-[#FAF6EE] py-16 overflow-hidden">
       <div className="mx-auto max-w-[1200px] px-6">
@@ -129,12 +144,6 @@ export default function RelatedProducts() {
                 
                 {item.status === 'available' && item.price && (
                   <div className="flex flex-col items-center mb-4">
-                    <div className="flex items-center gap-1 mb-1">
-                      {[...Array(5)].map((_, i) => (
-                        <StarIcon key={i} />
-                      ))}
-                      <span className="text-[11px] text-[#A79C91] ml-1">{item.rating} ({item.reviews} reviews)</span>
-                    </div>
                     <div className="flex items-center gap-2">
                       <span className="text-[#751E29] text-[18px] font-bold">₹{item.price}</span>
                       <span className="text-[#8E8783] text-[14px] line-through">₹{item.originalPrice}</span>
@@ -143,10 +152,26 @@ export default function RelatedProducts() {
                 )}
 
                 <div className="mt-auto w-full">
-                  <button className="w-full h-[42px] rounded-full bg-[#751E29] text-[#FAF6EE] text-[13px] font-semibold tracking-wide flex items-center justify-center gap-2 shadow-[0_4px_12px_rgba(117,30,41,0.2)] hover:bg-[#5E1620] transition-colors">
-                    {item.status === 'available' ? <CartPlusIcon /> : <BellIcon />}
-                    {item.cta}
-                  </button>
+                  {item.status === "available" ? (
+                    <button
+                      type="button"
+                      onClick={handleAddBundle}
+                      className="w-full h-[42px] rounded-full bg-[#751E29] text-[#FAF6EE] text-[13px] font-semibold tracking-wide flex items-center justify-center gap-2 shadow-[0_4px_12px_rgba(117,30,41,0.2)] hover:bg-[#5E1620] transition-colors"
+                    >
+                      <CartPlusIcon />
+                      {item.cta}
+                    </button>
+                  ) : (
+                    <a
+                      href={`https://wa.me/${businessDetails.whatsappNumber}?text=${encodeURIComponent(comingSoonContent.notifyMessage(item.title))}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full h-[42px] rounded-full bg-[#751E29] text-[#FAF6EE] text-[13px] font-semibold tracking-wide flex items-center justify-center gap-2 shadow-[0_4px_12px_rgba(117,30,41,0.2)] hover:bg-[#5E1620] transition-colors"
+                    >
+                      <BellIcon />
+                      {item.cta}
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
