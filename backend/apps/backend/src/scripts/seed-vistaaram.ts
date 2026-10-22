@@ -1,6 +1,7 @@
 import { ExecArgs } from "@medusajs/framework/types";
 import {
   ContainerRegistrationKeys,
+  MedusaError,
   ModuleRegistrationName,
   Modules,
   ProductStatus,
@@ -60,7 +61,8 @@ export default async function seedVistaaram({ container }: ExecArgs) {
     fields: ["id", "name", "currency_code", "countries.*"],
   });
 
-  let indiaRegion = existingRegions.find((r: any) => r.currency_code === "inr" || r.name.toLowerCase() === "india");
+  const existingIndia = existingRegions.find((r: any) => r.currency_code === "inr" || r.name.toLowerCase() === "india");
+  let indiaRegion: { id: string } | undefined = existingIndia;
   if (!indiaRegion) {
     logger.info("Creating India Region (INR)...");
     const { result: createdRegions } = await createRegionsWorkflow(container).run({
@@ -79,6 +81,10 @@ export default async function seedVistaaram({ container }: ExecArgs) {
   } else {
     logger.info(`Found existing India Region: ${indiaRegion.id}`);
   }
+  if (!indiaRegion) {
+    throw new MedusaError(MedusaError.Types.NOT_FOUND, "Could not create or find the India region.");
+  }
+  const indiaRegionId = indiaRegion.id;
 
   // 3. Tax Region for India
   const { data: existingTaxRegions } = await query.graph({
@@ -166,7 +172,7 @@ export default async function seedVistaaram({ container }: ExecArgs) {
               amount: 49,
             },
             {
-              region_id: indiaRegion.id,
+              region_id: indiaRegionId,
               amount: 49,
             },
           ],
@@ -200,7 +206,7 @@ export default async function seedVistaaram({ container }: ExecArgs) {
               amount: 0,
             },
             {
-              region_id: indiaRegion.id,
+              region_id: indiaRegionId,
               amount: 0,
             },
           ],

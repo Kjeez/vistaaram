@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
         protocol: "http",
         hostname: "127.0.0.1",
       },
+      {
+        // Product images uploaded through Medusa to Oracle Object Storage.
+        protocol: "https",
+        hostname: "**.oraclecloud.com",
+      },
     ],
   },
 };

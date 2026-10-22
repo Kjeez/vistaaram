@@ -1,0 +1,10 @@
+**/node_modules
+**/.medusa
+**/.env
+**/.env.*
+!**/.env.template
+**/.turbo
+**/coverage
+.git
+deploy/.env
+deploy/backups

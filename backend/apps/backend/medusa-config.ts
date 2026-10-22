@@ -5,10 +5,17 @@ loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 const razorpayConfigured = Boolean(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET)
 const googleConfigured = Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET)
 const resendConfigured = Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM)
+// Production sets REDIS_URL; local dev leaves it unset and Medusa uses in-memory fallbacks.
+const redisUrl = process.env.REDIS_URL
+// S3-compatible storage (Oracle Object Storage in production). Unset = files saved on local disk.
+const s3Configured = Boolean(process.env.S3_BUCKET && process.env.S3_ACCESS_KEY_ID && process.env.S3_SECRET_ACCESS_KEY)
 
 module.exports = defineConfig({
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
+    redisUrl,
+    // "shared" runs API and background jobs in one process, which is right for a single server.
+    workerMode: (process.env.MEDUSA_WORKER_MODE as "shared" | "worker" | "server") || "shared",
     http: {
       storeCors: process.env.STORE_CORS!,
       adminCors: process.env.ADMIN_CORS!,
@@ -16,6 +23,10 @@ module.exports = defineConfig({
       jwtSecret: process.env.JWT_SECRET,
       cookieSecret: process.env.COOKIE_SECRET,
     }
+  },
+  admin: {
+    disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
+    backendUrl: process.env.MEDUSA_BACKEND_URL,
   },
   modules: [
     {
@@ -83,6 +94,56 @@ module.exports = defineConfig({
         ],
       },
     },
+    ...(s3Configured
+      ? [
+          {
+            resolve: "@medusajs/medusa/file",
+            options: {
+              providers: [
+                {
+                  resolve: "@medusajs/medusa/file-s3",
+                  id: "s3",
+                  options: {
+                    // Public URL prefix for uploaded files, e.g.
+                    // https://objectstorage.ap-mumbai-1.oraclecloud.com/n/<namespace>/b/<bucket>/o
+                    file_url: process.env.S3_FILE_URL,
+                    access_key_id: process.env.S3_ACCESS_KEY_ID,
+                    secret_access_key: process.env.S3_SECRET_ACCESS_KEY,
+                    region: process.env.S3_REGION,
+                    bucket: process.env.S3_BUCKET,
+                    // e.g. https://<namespace>.compat.objectstorage.ap-mumbai-1.oraclecloud.com
+                    endpoint: process.env.S3_ENDPOINT,
+                    prefix: "uploads/",
+                    // Oracle's S3 API has no per-object ACLs; the bucket itself is made public.
+                    acl: false,
+                    additional_client_config: { forcePathStyle: true },
+                  },
+                },
+              ],
+            },
+          },
+        ]
+      : []),
+    ...(redisUrl
+      ? [
+          { resolve: "@medusajs/medusa/cache-redis", options: { redisUrl } },
+          { resolve: "@medusajs/medusa/event-bus-redis", options: { redisUrl } },
+          { resolve: "@medusajs/medusa/workflow-engine-redis", options: { redis: { redisUrl } } },
+          {
+            resolve: "@medusajs/medusa/locking",
+            options: {
+              providers: [
+                {
+                  resolve: "@medusajs/medusa/locking-redis",
+                  id: "locking-redis",
+                  is_default: true,
+                  options: { redisUrl },
+                },
+              ],
+            },
+          },
+        ]
+      : []),
     { resolve: "./src/modules/wishlist" },
     { resolve: "./src/modules/review" },
   ],

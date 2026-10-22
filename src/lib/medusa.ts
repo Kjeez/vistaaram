@@ -25,12 +25,18 @@ export const MEDUSA_PUBLISHABLE_KEY =
   process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ||
   "pk_0dbc551000c77770a5ea227dc2ca85e371e9d5e699efc6c9502b808db49f1fb6"
 
-export const INDIA_REGION_ID = "reg_01M4T777DJJSBC5PNVXPDK98WN"
+// IDs differ per database. Production values come from the backend script
+// `npx medusa exec ./src/scripts/print-storefront-env.ts`; the defaults are the local dev database.
+export const INDIA_REGION_ID =
+  process.env.NEXT_PUBLIC_MEDUSA_REGION_ID || "reg_01M4T777DJJSBC5PNVXPDK98WN"
 
 export const VISTAARAM_VARIANTS = {
-  BOX_1: "variant_01M4T777QKQ3M2B6CBFYQR1MZK", // 1 Box (12 Cups) - ₹279
-  BOX_2: "variant_01M4T777QK8YW12QB6JAGDBBF0", // 2 Boxes (24 Cups) - ₹502
-  BOX_4: "variant_01M4T777QK0ECHA4RV5YJ2B1GQ", // 4 Boxes (48 Cups) - ₹948
+  // 1 Box (12 Cups) - ₹279
+  BOX_1: process.env.NEXT_PUBLIC_VARIANT_BOX_1 || "variant_01M4T777QKQ3M2B6CBFYQR1MZK",
+  // 2 Boxes (24 Cups) - ₹502
+  BOX_2: process.env.NEXT_PUBLIC_VARIANT_BOX_2 || "variant_01M4T777QK8YW12QB6JAGDBBF0",
+  // 4 Boxes (48 Cups) - ₹948
+  BOX_4: process.env.NEXT_PUBLIC_VARIANT_BOX_4 || "variant_01M4T777QK0ECHA4RV5YJ2B1GQ",
 } as const
 
 export interface ProductPackOption {

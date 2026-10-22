@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import ScrollToTop from "@/components/ui/ScrollToTop";
-import { SITE_URL } from "@/lib/site";
+import { IS_STAGING, SITE_URL } from "@/lib/site";
 
 const playfairDisplay = Playfair_Display({
   variable: "--font-playfair-display",
@@ -19,6 +19,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  ...(IS_STAGING && { robots: { index: false, follow: false } }),
   alternates: { canonical: "/" },
   title: "Vistaaram — Natural Sambrani Hawan Cup from Devbhoomi, Uttarakhand",
   description:
