@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ourStoryContent } from "@/data/content";
+import { ourStoryContent, storePolicy } from "@/data/content";
 
 function PatternOverlay() {
   return (
@@ -29,12 +29,23 @@ export default function StoryCTA() {
           {ourStoryContent.cta.headline}
         </h2>
         
-        <Link 
-          href={ourStoryContent.cta.buttonLink}
-          className="inline-flex items-center justify-center h-[52px] px-8 rounded-full bg-[#C9A24B] text-[#5E1620] text-[13px] font-bold tracking-[0.1em] uppercase hover:bg-[#EADAB8] transition-colors shadow-lg hover:shadow-xl hover:scale-105 duration-300"
-        >
-          {ourStoryContent.cta.buttonText}
-        </Link>
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto">
+          <Link
+            href={ourStoryContent.cta.buttonLink}
+            className="w-full sm:w-auto inline-flex items-center justify-center h-[52px] px-8 rounded-full bg-[#C9A24B] text-[#5E1620] text-[13px] font-bold tracking-[0.1em] uppercase hover:bg-[#EADAB8] transition-colors shadow-lg hover:shadow-xl hover:scale-105 duration-300"
+          >
+            {ourStoryContent.cta.buttonText}
+          </Link>
+          <Link
+            href="/shop"
+            className="w-full sm:w-auto inline-flex items-center justify-center h-[52px] px-8 rounded-full border border-[#C9A24B] text-[#FAF6EE] text-[13px] font-bold tracking-[0.1em] uppercase hover:bg-[#C9A24B]/15 transition-colors"
+          >
+            See all packs
+          </Link>
+        </div>
+        <p className="mt-6 text-[13px] text-[#FAF6EE]/75">
+          Cash on Delivery · Free shipping above ₹{storePolicy.freeShippingThreshold} · {storePolicy.returnWindowDays}-day returns
+        </p>
         
       </div>
     </section>

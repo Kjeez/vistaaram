@@ -27,7 +27,7 @@ export default function CartEmptyState() {
         Bring home the sacred fragrance of Devbhoomi.
       </p>
       <Link 
-        href="/product/natural-sambrani-hawan-cup"
+        href="/shop"
         className="inline-flex items-center justify-center h-[48px] px-8 rounded-full border-[1.5px] border-[#C9A24B] text-[#78591A] font-semibold tracking-wide bg-transparent hover:bg-[#EADAB8]/30 transition-colors"
       >
         Explore the Hawan Cup

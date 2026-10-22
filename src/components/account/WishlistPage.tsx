@@ -45,7 +45,7 @@ function Wishlist() {
       {items.length === 0 ? (
         <Card className="text-center">
           <p className="text-[15px] text-[#5A4F46] mb-5">Your wishlist is empty. Tap the heart on a product to save it here.</p>
-          <Link href="/product/natural-sambrani-hawan-cup" className={`${primaryButtonClass} inline-flex`}>
+          <Link href="/shop" className={`${primaryButtonClass} inline-flex`}>
             Browse products
           </Link>
         </Card>

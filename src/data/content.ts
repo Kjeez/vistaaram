@@ -107,7 +107,7 @@ export const tickerContent: TickerItem[] = [
 export const navbarContent = {
   logo: "/images/new_logo.png",
   links: [
-    { label: "Shop", href: "/product/natural-sambrani-hawan-cup" },
+    { label: "Shop", href: "/shop" },
     { label: "Our Story", href: "/story" },
     { label: "Process", href: "/#process" },
     { label: "Rituals", href: "/#rituals" },
@@ -424,16 +424,19 @@ export const testimonialsContent = {
   ] as Testimonial[],
 };
 
-/* ────────────── Stories Carousel ────────────── */
+/* ────────────── Story Page Gallery ────────────── */
 
 export const storiesContent = {
-  sectionTitle: "Stories from Devbhoomi",
-  sectionSubtitle: "Glimpses of the sacred land where Vistaaram is born",
+  sectionEyebrow: "From flower to flame",
+  sectionTitle: "How a Vistaaram Cup Is Made",
+  sectionSubtitle: "Every cup starts as an offering in a Devbhoomi temple.",
   stories: [
-    { image: "/images/story-1.jpg", caption: "Sunrise over the Himalayas" },
-    { image: "/images/story-2.jpg", caption: "Temple flowers being collected" },
-    { image: "/images/story-3.jpg", caption: "Artisans at work" },
-    { image: "/images/story-4.jpg", caption: "The sacred Ganga" },
+    { image: "/images/process_step_1.jpg", caption: "Temple flowers, collected after the day's offerings" },
+    { image: "/images/process_step_2.jpg", caption: "Petals sorted by hand" },
+    { image: "/images/process_step_4.jpg", caption: "Herbs ground in a stone mortar" },
+    { image: "/images/process_step_5.jpg", caption: "Each cup filled and shaped by hand" },
+    { image: "/images/slide2.jpg", caption: "Guided by the pandits of Devbhoomi" },
+    { image: "/images/ritual-1.jpg", caption: "Ready for your evening puja" },
   ],
 };
 
@@ -535,7 +538,7 @@ export const footerContent = {
       title: "Quick Links",
       links: [
         { label: "Home", href: "/" },
-        { label: "Shop", href: "/product/natural-sambrani-hawan-cup" },
+        { label: "Shop", href: "/shop" },
         { label: "Our Story", href: "/story" },
         { label: "FAQ", href: "/#faq" },
         { label: "Track Order", href: "/track" },

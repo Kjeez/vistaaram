@@ -261,7 +261,7 @@ export default function CheckoutClient() {
         <h1 className="font-display text-[#7A1F2B] text-[2rem]">Your cart is empty</h1>
         {error && <p className="text-[14px] text-red-600">{error}</p>}
         <Link
-          href="/product/natural-sambrani-hawan-cup"
+          href="/shop"
           className="h-12 px-8 rounded-full bg-[#751E29] text-[#FAF6EE] text-[13px] font-bold tracking-[0.1em] uppercase flex items-center"
         >
           Shop Sambrani Cups

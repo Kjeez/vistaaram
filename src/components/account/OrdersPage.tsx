@@ -83,7 +83,7 @@ function Orders({ linked }: { linked: boolean }) {
       {orders.length === 0 ? (
         <Card className="text-center">
           <p className="text-[15px] text-[#5A4F46] mb-5">You haven&apos;t placed any orders yet.</p>
-          <Link href="/product/natural-sambrani-hawan-cup" className={`${primaryButtonClass} inline-flex`}>
+          <Link href="/shop" className={`${primaryButtonClass} inline-flex`}>
             Shop Sambrani Cups
           </Link>
         </Card>

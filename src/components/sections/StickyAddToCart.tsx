@@ -26,8 +26,8 @@ export default function StickyAddToCart() {
 
   // Listen for pack selection changes from ProductDetail
   useEffect(() => {
-    const handlePackChange = (e: any) => {
-      const packId = e.detail;
+    const handlePackChange = (e: Event) => {
+      const packId = (e as CustomEvent<string>).detail;
       const found = PACK_OPTIONS.find((p) => p.id === packId);
       if (found) setSelectedPack(found);
     };
@@ -92,7 +92,8 @@ export default function StickyAddToCart() {
               )}
             </div>
             
-            <div className="flex items-center gap-2 mt-0.5">
+            {/* On phones the price is shown next to the button instead, so this row would only be cut off. */}
+            <div className="hidden sm:flex items-center gap-2 mt-0.5">
               <span className="text-[#8E8783] text-[11px] sm:text-[12px] line-through">
                 ₹{selectedPack.mrp}
               </span>

@@ -8,6 +8,7 @@ import { useCart } from "@/context/CartContext";
 import { useRouter } from "next/navigation";
 import { PACK_OPTIONS, ProductPackOption } from "@/lib/medusa";
 import WishlistButton from "@/components/ui/WishlistButton";
+import RatingSummary from "@/components/ui/RatingSummary";
 
 /* =========================================================
    ICONS
@@ -187,7 +188,9 @@ export default function ProductDetail({
           <div className="flex items-center text-[13px] text-[#6B6259] mb-6">
             <Link href="/" className="hover:text-[#751E29] transition-colors">Home</Link>
             <span className="mx-2 text-[#C9A24B]">/</span>
-            <span className="text-[#4A423C] font-medium">{productContent.name}</span>
+            <Link href="/shop" className="hover:text-[#751E29] transition-colors">Shop</Link>
+            <span className="mx-2 text-[#C9A24B]">/</span>
+            <span className="text-[#4A423C] font-medium truncate">{productContent.name}</span>
           </div>
         )}
 
@@ -301,11 +304,12 @@ export default function ProductDetail({
             </p>
             
             {/* Title */}
-            <h1 className="font-display font-semibold text-[#751E29] text-[36px] md:text-[42px] leading-[1.1] mb-5">
+            <h1 className="font-display font-semibold text-[#751E29] text-[36px] md:text-[42px] leading-[1.1] mb-3">
               Natural Sambrani
               <br />
               Hawan Cup
             </h1>
+            <RatingSummary className="mb-4" />
             
             {/* Pricing */}
             <div className="flex items-center gap-4 mb-2">

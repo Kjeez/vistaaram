@@ -1,7 +1,25 @@
 import Medusa from "@medusajs/js-sdk"
 
-export const MEDUSA_BACKEND_URL =
+const CONFIGURED_BACKEND_URL =
   process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || "http://localhost:9000"
+
+const LOOPBACK = /^(localhost|127\.0\.0\.1)$/
+
+/**
+ * In local development the backend URL is localhost, which a phone on the same Wi-Fi can't
+ * reach. When the page itself was opened via a LAN address (e.g. 192.168.0.108:3000), point
+ * the API at that host instead. Production backend URLs are never rewritten.
+ */
+function resolveBackendUrl() {
+  if (typeof window === "undefined") return CONFIGURED_BACKEND_URL
+  const configured = new URL(CONFIGURED_BACKEND_URL)
+  const pageHost = window.location.hostname
+  if (!LOOPBACK.test(configured.hostname) || LOOPBACK.test(pageHost)) return CONFIGURED_BACKEND_URL
+  configured.hostname = pageHost
+  return configured.origin
+}
+
+export const MEDUSA_BACKEND_URL = resolveBackendUrl()
 
 export const MEDUSA_PUBLISHABLE_KEY =
   process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY ||

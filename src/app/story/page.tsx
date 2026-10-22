@@ -8,6 +8,7 @@ import StoryTimeline from "@/components/sections/story/StoryTimeline";
 import Founders from "@/components/sections/story/Founders";
 import ValuesStrip from "@/components/sections/story/ValuesStrip";
 import StoryCTA from "@/components/sections/story/StoryCTA";
+import StoryGallery from "@/components/sections/story/StoryGallery";
 import PahadiDivider from "@/components/ui/PahadiDivider";
 import PageTransition from "@/components/ui/PageTransition";
 import { ourStoryContent } from "@/data/content";
@@ -51,6 +52,10 @@ export default function StoryPage() {
           
           <PahadiDivider className="py-4 bg-[#FAF6EE]" />
           
+          <StoryGallery />
+
+          <PahadiDivider className="py-4 bg-[#FAF6EE]" />
+
           <PanditNetwork />
           
           <PahadiDivider className="py-4 bg-[#FAF6EE]" />

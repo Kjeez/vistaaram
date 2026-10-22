@@ -68,7 +68,7 @@ export default function StoryChapter({ number, title, body, image, pullQuote, dh
               {pullQuote && (
                 <div className="mt-4 pl-6 border-l-2 border-[#C9A24B]">
                   <p className="font-display italic text-[#C9A24B] text-[22px] md:text-[26px] leading-[1.3]">
-                    "{pullQuote}"
+                    &ldquo;{pullQuote}&rdquo;
                   </p>
                 </div>
               )}
