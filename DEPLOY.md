@@ -204,6 +204,34 @@ docker compose exec -e IMAGE_SOURCE_URL=https://store.vistaaram.in medusa \
   npx medusa exec ./src/scripts/migrate-product-images.js
 ```
 
+### Store emails (Google Workspace)
+
+Order confirmations, shipped emails, password resets and new-order alerts are sent as
+`sales@vistaaram.in` through the Gmail API. This needs a Google Cloud "service account" that your
+Workspace admin authorises once — no mailbox password is stored anywhere. Do this logged in as the
+**Workspace admin** for vistaaram.in.
+
+1. console.cloud.google.com → create (or pick) a project, e.g. `vistaaram-store`.
+2. **APIs & Services → Library** → search **Gmail API** → **Enable**.
+3. **IAM & Admin → Service Accounts → Create service account**: name `vistaaram-mailer`, no roles
+   needed → Done. Open it → **Keys → Add key → Create new key → JSON** → a `.json` file downloads.
+   Keep this file private (it lets the store send email as you).
+   - If Google says key creation is disabled by an organisation policy, the admin must allow it:
+     **IAM & Admin → Organization policies → "Disable service account key creation"** → override
+     for this project.
+4. On the service account's **Details** tab, copy the **Unique ID** (a long number).
+5. admin.google.com → **Security → Access and data control → API controls → Manage Domain Wide
+   Delegation → Add new**: Client ID = that Unique ID, OAuth scope
+   `https://www.googleapis.com/auth/gmail.send` → **Authorise**. (Can take a few minutes to apply.)
+6. Turn the JSON file into one line for `.env`. On your PC (PowerShell, in the download folder):
+   `[Convert]::ToBase64String([IO.File]::ReadAllBytes("the-key-file.json")) | Set-Clipboard`
+   Paste it as `GMAIL_SERVICE_ACCOUNT_KEY_BASE64=` in the VM's `.env` (and your local
+   `backend/apps/backend/.env` to test locally), then `docker compose up -d`.
+7. Recommended for inbox delivery: admin.google.com → **Apps → Google Workspace → Gmail →
+   Authenticate email** → generate the DKIM record, add it at your DNS provider, **Start authentication**.
+8. Test: place a COD order — the customer address and `sales@vistaaram.in` should both get an email.
+   If not, `docker compose logs medusa | grep -i gmail` shows Google's error.
+
 ### PhonePe payment notifications (webhook)
 
 So orders still get confirmed when a shopper pays but closes the browser before returning:
@@ -231,7 +259,8 @@ Then test on your phone at `https://store.vistaaram.in`:
   and can retry; no order is created
 - [ ] The order appears at `https://api.vistaaram.in/app` → Orders
 - [ ] Sign up, log in with Google, add an address, heart a product
-- [ ] Forgot password sends an email (needs `RESEND_API_KEY` in `.env`)
+- [ ] Order confirmation reaches the customer and the new-order alert reaches `sales@vistaaram.in`
+- [ ] Forgot password sends an email
 
 ## Cutover — when you are ready to replace WordPress
 

@@ -5,6 +5,7 @@ loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 const razorpayConfigured = Boolean(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET)
 const phonepeConfigured = Boolean(process.env.PHONEPE_CLIENT_ID && process.env.PHONEPE_CLIENT_SECRET)
 const googleConfigured = Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET)
+const gmailConfigured = Boolean(process.env.GMAIL_SERVICE_ACCOUNT_KEY_BASE64 && process.env.GMAIL_SENDER)
 const resendConfigured = Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM)
 // Production sets REDIS_URL; local dev leaves it unset and Medusa uses in-memory fallbacks.
 const redisUrl = process.env.REDIS_URL
@@ -91,11 +92,24 @@ module.exports = defineConfig({
       },
     },
     {
-      // Without Resend credentials, emails are only logged (handy in development).
+      // Store emails go out through Google Workspace (Gmail API) when configured, else Resend;
+      // with neither, they are only logged (handy in development).
       resolve: "@medusajs/medusa/notification",
       options: {
         providers: [
-          resendConfigured
+          gmailConfigured
+            ? {
+                resolve: "./src/modules/gmail",
+                id: "gmail",
+                options: {
+                  channels: ["email"],
+                  service_account_key_base64: process.env.GMAIL_SERVICE_ACCOUNT_KEY_BASE64,
+                  sender: process.env.GMAIL_SENDER,
+                  sender_name: process.env.GMAIL_SENDER_NAME || "Vistaaram",
+                  reply_to: process.env.STORE_EMAIL || process.env.GMAIL_SENDER,
+                },
+              }
+            : resendConfigured
             ? {
                 resolve: "./src/modules/resend",
                 id: "resend",
