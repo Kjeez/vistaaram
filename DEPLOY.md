@@ -130,7 +130,9 @@ chmod 600 .env
 - `S3_FILE_URL` = `https://objectstorage.<region>.oraclecloud.com/n/<namespace>/b/vistaaram-media/o`
 - `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` = the customer secret key from Part 5
 - `S3_REGION` = your region identifier, e.g. `ap-mumbai-1`
-- Copy `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` from your local `backend/apps/backend/.env`.
+- Copy `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` and the four `PHONEPE_*` values from your local
+  `backend/apps/backend/.env`. For `PHONEPE_WEBHOOK_USERNAME` / `PHONEPE_WEBHOOK_PASSWORD`, make up a
+  username and a long random password (`openssl rand -hex 16`); you enter the same pair at PhonePe in Part 10.
 
 Start everything (the first build takes 5–15 minutes):
 
@@ -202,8 +204,31 @@ docker compose exec -e IMAGE_SOURCE_URL=https://store.vistaaram.in medusa \
   npx medusa exec ./src/scripts/migrate-product-images.js
 ```
 
+### PhonePe payment notifications (webhook)
+
+So orders still get confirmed when a shopper pays but closes the browser before returning:
+
+1. Log in at business.phonepe.com with **Test Mode OFF** (live).
+2. **Developer Settings → Webhook → Create Webhook**:
+   - URL: `https://api.vistaaram.in/hooks/payment/phonepe_phonepe`
+   - Username / Password: the `PHONEPE_WEBHOOK_USERNAME` / `PHONEPE_WEBHOOK_PASSWORD` from the VM `.env`
+   - Events: `checkout.order.completed`, `checkout.order.failed`
+3. On the VM: `docker compose up -d` (reloads `.env`) if you changed it after starting.
+
+### Live payment test (real money, refunded afterwards)
+
+PhonePe credentials are live, so the only full test is a real purchase:
+
+1. On `https://store.vistaaram.in`, buy a 1-box pack and pay with **PhonePe** (UPI is quickest).
+2. You should land on the order confirmation page; the order shows as paid in the admin.
+3. Admin → the order → **Refund** the full amount. PhonePe processes it back to the same UPI/card
+   (refund timelines are PhonePe's/your bank's).
+4. Check `docker compose logs medusa | grep -i phonepe` for errors if anything looks off.
+
 Then test on your phone at `https://store.vistaaram.in`:
 - [ ] Add a pack to the cart, check out with **Cash on Delivery**, see the confirmation page
+- [ ] Start a **PhonePe** payment, cancel it on PhonePe's page: you return to "Payment not confirmed"
+  and can retry; no order is created
 - [ ] The order appears at `https://api.vistaaram.in/app` → Orders
 - [ ] Sign up, log in with Google, add an address, heart a product
 - [ ] Forgot password sends an email (needs `RESEND_API_KEY` in `.env`)

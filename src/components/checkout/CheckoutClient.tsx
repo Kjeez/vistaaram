@@ -20,6 +20,7 @@ import {
   listPaymentProviders,
   normalizePhone,
   openRazorpay,
+  PHONEPE_PROVIDER_ID,
   retrieveCheckoutCart,
   saveAddress,
   setShippingMethod,
@@ -98,14 +99,16 @@ export default function CheckoutClient() {
   const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([]);
 
   const [providers, setProviders] = useState<string[]>([]);
-  const [method, setMethod] = useState<PaymentMethod>("razorpay");
+  const [method, setMethod] = useState<PaymentMethod>("cod");
 
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   // Set once Razorpay reports success, so a failed order confirmation can be retried without paying twice.
   const [paidPaymentId, setPaidPaymentId] = useState<string | null>(null);
 
+  const phonepeEnabled = providers.includes(PHONEPE_PROVIDER_ID);
   const razorpayEnabled = providers.includes(RAZORPAY_PROVIDER_ID);
+  const anyPaymentEnabled = phonepeEnabled || razorpayEnabled || providers.includes(COD_PROVIDER_ID);
   const codEnabled = providers.includes(COD_PROVIDER_ID);
 
   // Load the cart and enabled payment providers once. CartContext persists the cart id to
@@ -127,7 +130,9 @@ export default function CheckoutClient() {
         setCartId(id);
         setCart(c);
         setProviders(p);
-        setMethod(p.includes(RAZORPAY_PROVIDER_ID) ? "razorpay" : "cod");
+        setMethod(
+          p.includes(PHONEPE_PROVIDER_ID) ? "phonepe" : p.includes(RAZORPAY_PROVIDER_ID) ? "razorpay" : "cod"
+        );
         const saved = addressFromCart(c);
         if (saved) setAddress(saved);
       } catch {
@@ -228,6 +233,13 @@ export default function CheckoutClient() {
         return;
       }
       const { session } = await initiatePayment(cartId, method);
+      if (method === "phonepe") {
+        const checkoutUrl = session.data?.checkout_url;
+        if (typeof checkoutUrl !== "string") throw new Error("Could not open PhonePe. Please try again.");
+        // Leave the page for PhonePe; the return page completes the order once PhonePe confirms payment.
+        window.location.assign(checkoutUrl);
+        return;
+      }
       if (method === "razorpay") {
         const result = await openRazorpay({ sessionData: session.data ?? {}, address });
         setPaidPaymentId(result.razorpay_payment_id);
@@ -403,6 +415,15 @@ export default function CheckoutClient() {
                 )}
 
                 <div className="flex flex-col gap-3">
+                  {phonepeEnabled && (
+                    <label className={`flex items-start gap-3 border rounded-lg px-4 py-4 cursor-pointer bg-white ${method === "phonepe" ? "border-[#751E29]" : "border-[#E6DED2]"}`}>
+                      <input type="radio" name="payment" checked={method === "phonepe"} onChange={() => setMethod("phonepe")} className="mt-1 accent-[#751E29]" />
+                      <span>
+                        <span className="block text-[15px] font-medium text-[#4A423C]">Pay online</span>
+                        <span className="block text-[13px] text-[#8E8783]">UPI, cards &amp; net banking via PhonePe</span>
+                      </span>
+                    </label>
+                  )}
                   {razorpayEnabled && (
                     <label className={`flex items-start gap-3 border rounded-lg px-4 py-4 cursor-pointer bg-white ${method === "razorpay" ? "border-[#751E29]" : "border-[#E6DED2]"}`}>
                       <input type="radio" name="payment" checked={method === "razorpay"} onChange={() => setMethod("razorpay")} className="mt-1 accent-[#751E29]" />
@@ -421,7 +442,7 @@ export default function CheckoutClient() {
                       </span>
                     </label>
                   )}
-                  {!razorpayEnabled && !codEnabled && (
+                  {!anyPaymentEnabled && (
                     <p className="text-[14px] text-red-600">Payments are temporarily unavailable. Please contact us on WhatsApp.</p>
                   )}
                 </div>
@@ -439,7 +460,7 @@ export default function CheckoutClient() {
 
                 <button
                   onClick={handlePlaceOrder}
-                  disabled={busy || (!razorpayEnabled && !codEnabled)}
+                  disabled={busy || !anyPaymentEnabled}
                   className="mt-6 w-full h-[52px] rounded-full bg-[#751E29] text-[#FAF6EE] text-[13px] font-bold tracking-[0.1em] uppercase flex items-center justify-center gap-2 shadow-[0_6px_18px_rgba(117,30,41,0.2)] hover:bg-[#5E1620] transition-colors disabled:opacity-60"
                 >
                   {busy

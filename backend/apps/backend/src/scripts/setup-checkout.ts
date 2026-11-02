@@ -14,7 +14,7 @@ const STANDARD_SHIPPING_FEE = 49
 /**
  * Prepares the India region for checkout. Safe to re-run.
  *
- * - Enables COD (pp_system_default) and, when configured, Razorpay on the India region.
+ * - Enables COD (pp_system_default) and, when configured, PhonePe / Razorpay on the India region.
  * - Adds return reasons and a free "Return Pickup" option so customers can request returns.
  * - Collapses shipping into one "Standard Delivery" option priced at 49, free when the
  *   cart's item total is at least 499. The seed's separate free option had no total rule,
@@ -37,15 +37,17 @@ export default async function setupCheckout({ container }: ExecArgs) {
     entity: "payment_provider",
     fields: ["id", "is_enabled"],
   })
-  // Provider rows outlive config changes, so Razorpay also requires its keys to be set now.
-  const razorpayConfigured = Boolean(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET)
-  const providerIds = ["pp_system_default", "pp_razorpay_razorpay"].filter(
-    (id) =>
-      providers.some((p) => p.id === id && p.is_enabled) &&
-      (id !== "pp_razorpay_razorpay" || razorpayConfigured)
+  // Provider rows outlive config changes, so online gateways also require their keys to be set now.
+  const configured: Record<string, boolean> = {
+    pp_system_default: true,
+    pp_phonepe_phonepe: Boolean(process.env.PHONEPE_CLIENT_ID && process.env.PHONEPE_CLIENT_SECRET),
+    pp_razorpay_razorpay: Boolean(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET),
+  }
+  const providerIds = Object.keys(configured).filter(
+    (id) => configured[id] && providers.some((p) => p.id === id && p.is_enabled)
   )
-  if (!providerIds.includes("pp_razorpay_razorpay")) {
-    logger.warn("Razorpay provider not registered. Set RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET and re-run.")
+  if (!providerIds.some((id) => id !== "pp_system_default")) {
+    logger.warn("No online payment gateway configured (PhonePe or Razorpay); only Cash on Delivery is enabled.")
   }
 
   await updateRegionsWorkflow(container).run({

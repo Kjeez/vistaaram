@@ -2,8 +2,18 @@ import { medusa } from "@/lib/medusa";
 
 export const COD_PROVIDER_ID = "pp_system_default";
 export const RAZORPAY_PROVIDER_ID = "pp_razorpay_razorpay";
+export const PHONEPE_PROVIDER_ID = "pp_phonepe_phonepe";
 
-export type PaymentMethod = "razorpay" | "cod";
+/** Storefront page PhonePe sends the shopper back to after paying. */
+export const PHONEPE_RETURN_PATH = "/checkout/payment-return";
+
+export type PaymentMethod = "phonepe" | "razorpay" | "cod";
+
+const PROVIDER_BY_METHOD: Record<PaymentMethod, string> = {
+  phonepe: PHONEPE_PROVIDER_ID,
+  razorpay: RAZORPAY_PROVIDER_ID,
+  cod: COD_PROVIDER_ID,
+};
 
 export const CHECKOUT_CART_FIELDS =
   "id,email,currency_code,completed_at,*items,*items.variant,*shipping_address,*shipping_methods," +
@@ -83,9 +93,11 @@ export async function setShippingMethod(cartId: string, optionId: string) {
 /** Creates (or refreshes) the payment session for the chosen method and returns its data. */
 export async function initiatePayment(cartId: string, method: PaymentMethod) {
   const cart = await retrieveCheckoutCart(cartId);
-  const providerId = method === "cod" ? COD_PROVIDER_ID : RAZORPAY_PROVIDER_ID;
+  const providerId = PROVIDER_BY_METHOD[method];
   const { payment_collection } = await medusa.store.payment.initiatePaymentSession(cart, {
     provider_id: providerId,
+    // PhonePe redirects to its own payment page, then back to this return page.
+    ...(method === "phonepe" && { data: { redirect_url: `${window.location.origin}${PHONEPE_RETURN_PATH}` } }),
   });
   const session = payment_collection?.payment_sessions?.find((s) => s.provider_id === providerId);
   if (!session) throw new Error("Could not start payment. Please try again.");

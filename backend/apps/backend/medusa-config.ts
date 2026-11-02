@@ -3,6 +3,7 @@ import { loadEnv, defineConfig } from '@medusajs/framework/utils'
 loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 
 const razorpayConfigured = Boolean(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET)
+const phonepeConfigured = Boolean(process.env.PHONEPE_CLIENT_ID && process.env.PHONEPE_CLIENT_SECRET)
 const googleConfigured = Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET)
 const resendConfigured = Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM)
 // Production sets REDIS_URL; local dev leaves it unset and Medusa uses in-memory fallbacks.
@@ -33,19 +34,37 @@ module.exports = defineConfig({
       // Cash on Delivery uses the built-in pp_system_default provider, which is always registered.
       resolve: "@medusajs/medusa/payment",
       options: {
-        providers: razorpayConfigured
-          ? [
-              {
-                resolve: "./src/modules/razorpay",
-                id: "razorpay",
-                options: {
-                  key_id: process.env.RAZORPAY_KEY_ID,
-                  key_secret: process.env.RAZORPAY_KEY_SECRET,
-                  webhook_secret: process.env.RAZORPAY_WEBHOOK_SECRET,
+        providers: [
+          ...(phonepeConfigured
+            ? [
+                {
+                  resolve: "./src/modules/phonepe",
+                  id: "phonepe",
+                  options: {
+                    client_id: process.env.PHONEPE_CLIENT_ID,
+                    client_secret: process.env.PHONEPE_CLIENT_SECRET,
+                    client_version: process.env.PHONEPE_CLIENT_VERSION || "1",
+                    env: process.env.PHONEPE_ENV === "sandbox" ? "sandbox" : "production",
+                    webhook_username: process.env.PHONEPE_WEBHOOK_USERNAME,
+                    webhook_password: process.env.PHONEPE_WEBHOOK_PASSWORD,
+                  },
                 },
-              },
-            ]
-          : [],
+              ]
+            : []),
+          ...(razorpayConfigured
+            ? [
+                {
+                  resolve: "./src/modules/razorpay",
+                  id: "razorpay",
+                  options: {
+                    key_id: process.env.RAZORPAY_KEY_ID,
+                    key_secret: process.env.RAZORPAY_KEY_SECRET,
+                    webhook_secret: process.env.RAZORPAY_WEBHOOK_SECRET,
+                  },
+                },
+              ]
+            : []),
+        ],
       },
     },
     {
