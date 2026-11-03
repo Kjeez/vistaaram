@@ -20,7 +20,7 @@ export default function FAQ() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top 70%",
-          once: true,
+          toggleActions: "play none none none",
         },
         x: -80,
         opacity: 0,
@@ -32,7 +32,7 @@ export default function FAQ() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top 70%",
-          once: true,
+          toggleActions: "play none none none",
         },
         x: 80,
         opacity: 0,
@@ -40,18 +40,25 @@ export default function FAQ() {
         ease: "power3.out",
       });
 
-      gsap.from(".faq-animate", {
-        scrollTrigger: {
-          trigger: ".faq-accordion-wrap",
-          start: "top 80%",
-          once: true,
-        },
-        y: 40,
-        opacity: 0,
-        duration: 0.9,
-        stagger: 0.12,
-        ease: "power3.out",
-      });
+      // fromTo with explicit end values: a from() tween records whatever opacity the cards
+      // have at setup, which left them stuck invisible when that was already 0.
+      gsap.fromTo(
+        ".faq-animate",
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.9,
+          stagger: 0.08,
+          ease: "power3.out",
+          clearProps: "transform,opacity",
+          scrollTrigger: {
+            trigger: ".faq-accordion-wrap",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
 
       gsap.fromTo(
         ".faq-pandit-image",
@@ -64,7 +71,7 @@ export default function FAQ() {
           scrollTrigger: {
             trigger: ".faq-pandit-section",
             start: "top 75%",
-            once: true,
+            toggleActions: "play none none none",
           },
         }
       );
@@ -73,7 +80,7 @@ export default function FAQ() {
         scrollTrigger: {
           trigger: ".faq-pandit-section",
           start: "top 70%",
-          once: true,
+          toggleActions: "play none none none",
         },
         x: 40,
         opacity: 0,
@@ -210,7 +217,7 @@ export default function FAQ() {
               return (
                 <div
                   key={index}
-                  className={`faq-animate rounded-2xl border transition-all duration-400 overflow-hidden ${
+                  className={`faq-animate rounded-2xl border transition-[border-color,background-color,box-shadow] duration-300 overflow-hidden ${
                     isOpen
                       ? "border-[#C9A24B] bg-white shadow-[0_6px_32px_rgba(201,162,75,0.15)]"
                       : "border-[#E6DED2] bg-white/80 hover:border-[#C9A24B]/60 hover:shadow-[0_2px_16px_rgba(201,162,75,0.08)]"

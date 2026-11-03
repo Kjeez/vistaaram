@@ -1,13 +1,17 @@
 import Image from "next/image";
 import { storiesContent } from "@/data/content";
+import { FlowerSpray, Mandala, OrnamentDivider } from "@/components/ui/Decor";
 
 /** Photo walk-through of how a cup is made; a swipeable row on phones, a grid on larger screens. */
 export default function StoryGallery() {
   const { sectionEyebrow, sectionTitle, sectionSubtitle, stories } = storiesContent;
 
   return (
-    <section className="w-full bg-[#FAF6EE] py-16 md:py-20" aria-labelledby="story-gallery-title">
-      <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+    <section className="relative w-full overflow-hidden bg-[#FAF6EE] py-16 md:py-20" aria-labelledby="story-gallery-title">
+      <Mandala className="absolute left-1/2 -top-24 -translate-x-1/2 w-[520px] h-[520px]" opacity={0.06} />
+      <FlowerSpray variant={2} className="hidden md:block absolute right-0 top-6 w-[130px] h-[190px]" opacity={0.35} />
+      <FlowerSpray variant={1} className="hidden md:block absolute left-0 bottom-6 w-[130px] h-[190px]" opacity={0.35} />
+      <div className="relative mx-auto max-w-[1200px] px-4 sm:px-6">
         <div className="text-center mb-10">
           <p className="text-[#B48635] text-[11px] sm:text-[12px] uppercase tracking-[0.24em] font-semibold mb-3">
             {sectionEyebrow}
@@ -15,6 +19,7 @@ export default function StoryGallery() {
           <h2 id="story-gallery-title" className="font-display font-medium text-[#7A1F2B] text-[30px] md:text-[40px] leading-tight mb-3">
             {sectionTitle}
           </h2>
+          <OrnamentDivider className="mb-4" />
           <p className="text-[#5A4F46] text-[15px]">{sectionSubtitle}</p>
         </div>
 

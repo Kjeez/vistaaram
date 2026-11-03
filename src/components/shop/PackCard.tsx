@@ -8,6 +8,7 @@ import { useCart } from "@/context/CartContext";
 import { productContent, storePolicy } from "@/data/content";
 import { ProductPackOption } from "@/lib/medusa";
 import { PRODUCT_PATH } from "@/lib/site";
+import { Mandala } from "@/components/ui/Decor";
 
 const FREE_SHIPPING_THRESHOLD = storePolicy.freeShippingThreshold;
 
@@ -84,9 +85,10 @@ export default function PackCard({ pack }: { pack: ProductPackOption }) {
         )}
       </Link>
 
-      <div className="flex flex-col flex-1 p-5 sm:p-6">
+      <div className="relative flex flex-col flex-1 p-5 sm:p-6">
+        <Mandala className="absolute -right-20 -bottom-20 w-[220px] h-[220px]" opacity={0.07} />
         <p className="text-[#B48635] text-[11px] uppercase tracking-[0.2em] font-semibold mb-1">{pack.name}</p>
-        <h3 className="font-display text-[#751E29] text-[22px] leading-tight mb-3">
+        <h3 className="font-display text-[#751E29] text-[22px] leading-tight mb-3 relative">
           {pack.shortTitle} · {pack.cups} Cups
         </h3>
 

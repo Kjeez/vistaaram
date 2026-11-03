@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { FlowerSpray, Mandala } from "@/components/ui/Decor";
 
 interface ChapterProps {
   number: string;
@@ -15,18 +16,29 @@ interface ChapterProps {
 export default function StoryChapter({ number, title, body, image, pullQuote, dhams, reverse = false }: ChapterProps) {
   return (
     <section className="relative w-full bg-[#FAF6EE] py-16 md:py-24 overflow-hidden">
-      <div className="mx-auto max-w-[1200px] px-6">
+      <Mandala
+        className={`absolute top-1/2 -translate-y-1/2 w-[520px] h-[520px] ${reverse ? "-left-48" : "-right-48"}`}
+        opacity={0.06}
+      />
+      <div className="relative mx-auto max-w-[1200px] px-6">
         <div className={`flex flex-col gap-12 lg:gap-20 items-center ${reverse ? 'lg:flex-row-reverse' : 'lg:flex-row'}`}>
           
           {/* Image Side */}
           <div className="w-full lg:w-1/2 flex justify-center">
-            <div className="relative w-full max-w-[500px] aspect-[4/3] lg:aspect-[5/4] rounded-[16px] overflow-hidden border border-[#C9A24B]/40 shadow-lg">
-              <Image 
-                src={image} 
-                alt={title} 
-                fill 
-                className="object-cover"
+            <div className="relative w-full max-w-[500px]">
+              {/* Offset gold frame behind the photo */}
+              <div
+                className={`absolute inset-0 rounded-[18px] border-2 border-[#C9A24B]/45 ${reverse ? "-translate-x-3 sm:-translate-x-4" : "translate-x-3 sm:translate-x-4"} translate-y-3 sm:translate-y-4`}
+                aria-hidden="true"
               />
+              <FlowerSpray
+                variant={reverse ? 2 : 1}
+                className={`absolute z-10 w-[90px] h-[130px] sm:w-[110px] sm:h-[160px] ${reverse ? "-top-10 -right-6 sm:-right-10" : "-bottom-10 -left-6 sm:-left-10"}`}
+                opacity={0.75}
+              />
+              <div className="relative w-full aspect-[4/3] lg:aspect-[5/4] rounded-[16px] overflow-hidden border border-[#C9A24B]/40 shadow-lg">
+                <Image src={image} alt={title} fill sizes="(max-width: 1024px) 100vw, 500px" className="object-cover" />
+              </div>
             </div>
           </div>
 

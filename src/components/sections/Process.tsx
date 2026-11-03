@@ -90,7 +90,7 @@ export default function Process() {
           scrollTrigger: {
             trigger: ".process-track",
             start: "top 65%",
-            once: true,
+            toggleActions: "play none none none",
           }
         }
       );
@@ -100,7 +100,7 @@ export default function Process() {
         scrollTrigger: {
           trigger: ".process-track",
           start: "top 65%",
-          once: true,
+          toggleActions: "play none none none",
         },
         y: 40,
         opacity: 0,
@@ -113,7 +113,7 @@ export default function Process() {
         scrollTrigger: {
           trigger: ".process-header",
           start: "top 80%",
-          once: true,
+          toggleActions: "play none none none",
         },
         x: -60,
         opacity: 0,
@@ -126,7 +126,7 @@ export default function Process() {
         scrollTrigger: {
           trigger: ".process-header",
           start: "top 80%",
-          once: true,
+          toggleActions: "play none none none",
         },
         x: 60,
         opacity: 0,
@@ -139,7 +139,7 @@ export default function Process() {
         scrollTrigger: {
           trigger: ".process-header",
           start: "top 80%",
-          once: true,
+          toggleActions: "play none none none",
         },
         y: 40,
         opacity: 0,

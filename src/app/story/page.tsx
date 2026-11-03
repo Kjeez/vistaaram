@@ -11,6 +11,7 @@ import StoryCTA from "@/components/sections/story/StoryCTA";
 import StoryGallery from "@/components/sections/story/StoryGallery";
 import PahadiDivider from "@/components/ui/PahadiDivider";
 import PageTransition from "@/components/ui/PageTransition";
+import TemplePanorama from "@/components/sections/story/TemplePanorama";
 import { ourStoryContent } from "@/data/content";
 
 export const metadata: Metadata = {
@@ -61,8 +62,8 @@ export default function StoryPage() {
           <PahadiDivider className="py-4 bg-[#FAF6EE]" />
           
           <StoryTimeline />
-          
-          <PahadiDivider className="py-4 bg-[#FAF6EE]" />
+
+          <TemplePanorama />
           
           <Founders />
           

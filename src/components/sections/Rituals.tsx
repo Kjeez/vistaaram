@@ -113,7 +113,7 @@ export default function Rituals() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top 75%",
-          once: true,
+          toggleActions: "play none none none",
         },
         y: 30,
         opacity: 0,
@@ -126,7 +126,7 @@ export default function Rituals() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top 75%",
-          once: true,
+          toggleActions: "play none none none",
         },
         y: 50,
         opacity: 0,

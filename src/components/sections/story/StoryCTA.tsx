@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ourStoryContent, storePolicy } from "@/data/content";
+import { OrnamentDivider } from "@/components/ui/Decor";
 
 function PatternOverlay() {
   return (
@@ -25,9 +26,14 @@ export default function StoryCTA() {
       
       <div className="relative z-10 mx-auto max-w-[800px] px-6 flex flex-col items-center text-center">
         
-        <h2 className="font-display font-medium text-[#FAF6EE] text-[36px] md:text-[48px] leading-tight mb-8">
+        <div className="relative w-[120px] h-[100px] mb-6 opacity-90 pointer-events-none select-none" aria-hidden="true">
+          <Image src="/images/diya.png" alt="" fill sizes="120px" className="object-contain drop-shadow-[0_0_24px_rgba(232,199,122,0.35)]" />
+        </div>
+        <h2 className="font-display font-medium text-[#FAF6EE] text-[36px] md:text-[48px] leading-tight mb-5">
           {ourStoryContent.cta.headline}
         </h2>
+        <OrnamentDivider light className="mb-5" />
+        <p className="font-display text-[#E8C77A] text-[18px] md:text-[20px] mb-9">देवभूमि की पवित्र सुगंध, अब आपके घर में।</p>
         
         <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto">
           <Link

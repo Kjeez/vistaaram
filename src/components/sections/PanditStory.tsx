@@ -25,7 +25,7 @@ export default function PanditStory() {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top 75%",
-            once: true,
+            toggleActions: "play none none none",
           },
         }
       );
@@ -35,7 +35,7 @@ export default function PanditStory() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top 70%",
-          once: true,
+          toggleActions: "play none none none",
         },
         x: 40,
         opacity: 0,
@@ -49,7 +49,7 @@ export default function PanditStory() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top 70%",
-          once: true,
+          toggleActions: "play none none none",
         },
         opacity: 0,
         duration: 2,
@@ -104,7 +104,7 @@ export default function PanditStory() {
           <p className="font-body text-[14px] md:text-[15px] lg:text-[16px] leading-[2.2]">
             <span className="bg-[#C9A24B] text-[#1a110a] font-medium py-1 px-1.5 box-decoration-clone">
               Every blend is guided by the knowledge of 500+ pandits —<br className="hidden xl:block" />
-              the same hands that have performed havans in Devbhoomi's<br className="hidden xl:block" />
+              the same hands that have performed havans in Devbhoomi&apos;s<br className="hidden xl:block" />
               temples for generations.
             </span>
           </p>
