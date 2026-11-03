@@ -1,11 +1,16 @@
 # Vistaaram backend stack for a single Oracle Cloud VM.
 #
 #   cd backend/deploy
-#   cp .env.example .env        # then fill it in
+#   cp env.example .env         # then fill it in
 #   docker compose up -d --build
 #
-# Only Caddy is reachable from the internet (ports 80/443). Postgres, Redis and Medusa
-# listen on the private Docker network only.
+# Two ways to run it:
+#   Shared server (e.g. alongside WordPress/CyberPanel): `docker compose up -d --build`
+#     Medusa listens on 127.0.0.1:9000 only; the existing web server (OpenLiteSpeed) proxies
+#     api.vistaaram.in to it. Postgres and Redis are never reachable from outside.
+#   Dedicated server: `docker compose --profile standalone up -d --build`
+#     Also starts Caddy on ports 80/443 with automatic HTTPS.
+# Memory limits keep the store from starving other sites on a shared server.
 
 name: vistaaram
 
@@ -13,6 +18,7 @@ services:
   postgres:
     image: postgres:16-alpine
     restart: unless-stopped
+    mem_limit: 1536m
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -28,6 +34,7 @@ services:
   redis:
     image: redis:7-alpine
     restart: unless-stopped
+    mem_limit: 512m
     command: ["redis-server", "--appendonly", "yes", "--maxmemory-policy", "noeviction"]
     volumes:
       - redis-data:/data
@@ -44,7 +51,11 @@ services:
       args:
         MEDUSA_BACKEND_URL: https://${API_DOMAIN}
     restart: unless-stopped
+    mem_limit: 3g
     env_file: .env
+    ports:
+      # Loopback only: reachable from this server's web server, not from the internet.
+      - "127.0.0.1:9000:9000"
     environment:
       NODE_ENV: production
       PORT: "9000"
@@ -59,6 +70,7 @@ services:
 
   caddy:
     image: caddy:2-alpine
+    profiles: ["standalone"]
     restart: unless-stopped
     ports:
       - "80:80"

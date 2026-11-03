@@ -17,6 +17,71 @@ Commands in grey boxes run on the new VM over SSH unless they say otherwise.
 
 ---
 
+## Which setup? (read first)
+
+- **Shared server (what Vistaaram uses):** the store backend runs in Docker on the *existing*
+  CyberPanel/WordPress VM, because that VM already uses the whole Always Free ARM allowance and
+  190 GB of the 200 GB free disk. Follow **"Shared CyberPanel server"** just below, then Parts 5, 8,
+  9 and 10. Skip Parts 1–4, 6 and 7.
+- **Dedicated server:** a new VM with Caddy for HTTPS — Parts 1–10 as written.
+
+## Shared CyberPanel server
+
+Nothing here restarts the VM or touches the WordPress site's files, database or domains.
+The store's containers listen on `127.0.0.1` only and have memory limits (about 5 GB in total).
+
+**1. Docker (on the VM, over SSH or CyberPanel → Terminal)**
+
+```bash
+docker --version || (curl -fsSL https://get.docker.com | sudo sh)
+sudo usermod -aG docker $USER   # then log out and back in
+df -h /                         # need ~15 GB free for images and the database
+```
+
+**2. Code and settings**
+
+```bash
+cd ~ && git clone https://github.com/Kjeez/vistaaram.git
+cd vistaaram/backend/deploy && cp env.example .env && chmod 600 .env
+nano .env    # fill in as described in Part 7 (API_DOMAIN=api.vistaaram.in etc.)
+docker compose up -d --build          # no "--profile standalone": Caddy is not used here
+curl -s http://127.0.0.1:9000/health  # prints OK when the backend is up
+```
+
+**3. api.vistaaram.in in Cloudflare** (DNS for vistaaram.in is managed there)
+
+- DNS → Add record: **A**, name `api`, IPv4 = the VM's public IP, Proxy status **Proxied**.
+- SSL/TLS → Overview: mode **Full (strict)** works once step 4 issues a certificate; use **Full**
+  until then. Don't change any existing record.
+
+**4. api.vistaaram.in in CyberPanel** (web UI, usually `https://<server-ip>:8090`)
+
+1. **Websites → Create Website**: domain `api.vistaaram.in`, any package/owner, any PHP version.
+2. **SSL → Manage SSL** → select `api.vistaaram.in` → **Issue SSL**.
+3. **Websites → List Websites → api.vistaaram.in → Manage → vHost Conf**, add at the end:
+
+   ```
+   extprocessor medusa {
+     type                    proxy
+     address                 127.0.0.1:9000
+     maxConns                200
+     initTimeout             60
+     retryTimeout            0
+     respBuffer              0
+   }
+   ```
+4. Same page → **Rewrite Rules**, set:
+
+   ```
+   REWRITERULE ^(.*)$ HTTP://medusa/$1 [P,L,E=PROXY-HOST:api.vistaaram.in]
+   ```
+5. Check: `https://api.vistaaram.in/health` shows `OK`, and `https://api.vistaaram.in/app` shows
+   the admin login. If the admin login page loads but logging in fails, tell your developer — the
+   proxy may need to pass `X-Forwarded-Proto: https`.
+
+Then continue with **Part 8** (load store data, using `docker compose exec` exactly as written),
+**Part 9** (Vercel) and **Part 10**. Backups: Part 8's backup script works as-is.
+
 ## Part 1 — Check free capacity (5 min)
 
 Oracle's Always Free tier includes a fixed amount of Ampere (ARM) capacity, shared by all VMs in the
