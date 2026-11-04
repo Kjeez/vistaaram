@@ -156,7 +156,24 @@ module.exports = defineConfig({
             },
           },
         ]
-      : []),
+      : process.env.MEDUSA_BACKEND_URL
+        ? [
+            {
+              // No bucket: keep uploads on the server's disk, but link them by the public API address
+              // (the default would be http://localhost:9000/static, which browsers can't reach).
+              resolve: "@medusajs/medusa/file",
+              options: {
+                providers: [
+                  {
+                    resolve: "@medusajs/medusa/file-local",
+                    id: "local",
+                    options: { backend_url: `${process.env.MEDUSA_BACKEND_URL.replace(/\/$/, "")}/static` },
+                  },
+                ],
+              },
+            },
+          ]
+        : []),
     ...(redisUrl
       ? [
           { resolve: "@medusajs/medusa/cache-redis", options: { redisUrl } },
