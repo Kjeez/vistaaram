@@ -53,6 +53,9 @@ services:
     restart: unless-stopped
     mem_limit: 3g
     env_file: .env
+    volumes:
+      # Admin uploads when no S3 bucket is configured (local file storage); survives rebuilds.
+      - medusa-static:/app/static
     ports:
       # Loopback only: reachable from this server's web server, not from the internet.
       - "127.0.0.1:9000:9000"
@@ -86,6 +89,7 @@ services:
       - medusa
 
 volumes:
+  medusa-static:
   postgres-data:
   redis-data:
   caddy-data:
