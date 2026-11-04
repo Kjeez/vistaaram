@@ -62,7 +62,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: "9000"
-      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
       REDIS_URL: redis://redis:6379
       MEDUSA_BACKEND_URL: https://${API_DOMAIN}
     depends_on:
