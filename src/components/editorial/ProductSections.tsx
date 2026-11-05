@@ -168,9 +168,9 @@ export function VoicesSection({ id = "voices" }: { id?: string } = {}) {
             ))}
           </div>
         </div>
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mt-10 md:mt-12 flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory -mx-5 px-5 sm:-mx-[clamp(20px,5vw,48px)] sm:px-[clamp(20px,5vw,48px)] md:mx-0 md:px-0 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {testimonialsContent.testimonials.map((t) => (
-            <article key={t.id} className="grid grid-cols-[120px_minmax(0,1fr)] bg-[#FFFDF8] border border-[#E6D9C2] rounded-[10px] overflow-hidden">
+            <article key={t.id} className="shrink-0 w-[86%] sm:w-[60%] md:w-auto snap-start grid grid-cols-[110px_minmax(0,1fr)] md:grid-cols-[120px_minmax(0,1fr)] bg-[#FFFDF8] border border-[#E6D9C2] rounded-[10px] overflow-hidden">
               <div className="relative min-h-[200px]">
                 <Image src={t.avatar} alt={t.name} fill sizes="120px" className="object-cover" />
               </div>
