@@ -105,7 +105,6 @@ export default function PackPurchase({ variant, mobileBar = true }: { variant: V
         image: productContent.images[0].src,
         subtitle: `${pack.cups} Cups · ${pack.shortTitle} · ${pack.ratePerBox}`,
       });
-      showToast(true, `${pack.name} × ${qty}`);
     } catch {
       showToast(false, "Couldn't add to cart. Please try again.");
     } finally {

@@ -3,6 +3,7 @@ import { Playfair_Display, Inter, Tiro_Devanagari_Hindi } from "next/font/google
 import "./globals.css";
 import ScrollToTop from "@/components/ui/ScrollToTop";
 import ScrollTriggerRefresh from "@/components/ui/ScrollTriggerRefresh";
+import CartAddedBar from "@/components/cart/CartAddedBar";
 import { IS_STAGING, SITE_URL } from "@/lib/site";
 
 const playfairDisplay = Playfair_Display({
@@ -78,6 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <ScrollToTop />
             <ScrollTriggerRefresh />
             {children}
+            <CartAddedBar />
           </CustomerProvider>
         </CartProvider>
       </body>

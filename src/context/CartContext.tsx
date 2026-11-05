@@ -34,6 +34,9 @@ interface CartContextType {
   resetCart: () => void;
   count: number;
   isLoading: boolean;
+  /** The item most recently added (drives the bottom "added to cart" bar); null once dismissed. */
+  lastAdded: (CartItem & { addedAt: number }) | null;
+  dismissLastAdded: () => void;
 }
 
 type MedusaCart = Awaited<ReturnType<typeof medusa.store.cart.retrieve>>["cart"];
@@ -59,6 +62,8 @@ const CartContext = createContext<CartContextType>({
   removeCoupon: async () => {},
   resetCart: () => {},
   count: 0,
+  lastAdded: null,
+  dismissLastAdded: () => {},
   isLoading: false,
 });
 
@@ -72,6 +77,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [shipping, setShipping] = useState(49);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [lastAdded, setLastAdded] = useState<(CartItem & { addedAt: number }) | null>(null);
+  const dismissLastAdded = useCallback(() => setLastAdded(null), []);
 
   // Save to local cache helper
   const saveLocalCache = useCallback((newItems: CartItem[], newCoupon = coupon, disc = discount) => {
@@ -273,6 +280,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       recalcTotals(updated);
       return updated;
     });
+
+    setLastAdded({ ...item, addedAt: Date.now() });
 
     // 2. Medusa backend persistence
     setIsLoading(true);
@@ -514,6 +523,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         resetCart,
         count,
         isLoading,
+        lastAdded,
+        dismissLastAdded,
       }}
     >
       {children}

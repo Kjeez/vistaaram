@@ -112,7 +112,11 @@ export function CustomerProvider({ children }: { children: ReactNode }) {
   );
 
   const startGoogleLogin = useCallback(async () => {
-    const result = await medusa.auth.login("customer", "google", {});
+    // Return to whichever address the shopper is on (Vercel URL, store domain, localhost).
+    // Each one must be listed under "Authorized redirect URIs" on the Google OAuth client.
+    const result = await medusa.auth.login("customer", "google", {
+      callback_url: `${window.location.origin}/auth/google/callback`,
+    });
     if (typeof result === "object" && "location" in result && result.location) {
       window.location.href = result.location;
       return;

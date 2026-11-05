@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
@@ -11,6 +11,15 @@ import { madeSteps } from "@/data/editorial";
 /** Section header (passed as children) with prev/next buttons, over a full-bleed snap-scrolling photo strip. */
 export function MadeCarousel({ children }: { children: React.ReactNode }) {
   const scroller = useRef<HTMLDivElement>(null);
+
+  // Always open on step 1, lined up with the heading: browsers can otherwise restore an old
+  // horizontal position (back/forward, reload) and land mid-strip.
+  useEffect(() => {
+    const reset = () => scroller.current?.scrollTo({ left: 0 });
+    reset();
+    window.addEventListener("pageshow", reset);
+    return () => window.removeEventListener("pageshow", reset);
+  }, []);
 
   const scroll = (dir: number) => {
     const el = scroller.current;
@@ -38,7 +47,7 @@ export function MadeCarousel({ children }: { children: React.ReactNode }) {
       {/* Left edge lines up with the 1200px container on wide screens; the strip bleeds off the right. */}
       <div
         ref={scroller}
-        className="mt-12 flex gap-6 overflow-x-auto snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden px-5 sm:px-[clamp(20px,5vw,48px)] min-[1296px]:pl-[calc((100vw-1200px)/2+48px)] scroll-pl-5 sm:scroll-pl-[clamp(20px,5vw,48px)] min-[1296px]:scroll-pl-[calc((100vw-1200px)/2+48px)]"
+        className="mt-12 flex gap-6 overflow-x-auto snap-x snap-proximity [scrollbar-width:none] [&::-webkit-scrollbar]:hidden px-5 sm:px-[clamp(20px,5vw,48px)] min-[1296px]:pl-[calc((100vw-1200px)/2+48px)] scroll-pl-5 sm:scroll-pl-[clamp(20px,5vw,48px)] min-[1296px]:scroll-pl-[calc((100vw-1200px)/2+48px)]"
       >
         {madeSteps.map((s, i) => (
           <figure key={s.image} className="shrink-0 w-[clamp(250px,26vw,320px)] snap-start">

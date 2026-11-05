@@ -218,6 +218,11 @@ class PhonePeProviderService extends AbstractPaymentProvider<Options> {
       return { status: PaymentSessionStatus.ERROR, data: input.data }
     }
     const status = await this.fetchStatus(merchantOrderId)
+    // Logged so a failed or unpaid checkout can be traced (PhonePe's own error code is included when present).
+    const detail = status as unknown as { errorCode?: string; detailedErrorCode?: string }
+    this.logger_.info(
+      `PhonePe order ${merchantOrderId}: ${status.state}${detail.errorCode ? ` (${detail.errorCode}${detail.detailedErrorCode ? `/${detail.detailedErrorCode}` : ""})` : ""}`
+    )
     return {
       status: this.statusOf(status.state),
       data: {

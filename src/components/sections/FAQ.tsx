@@ -59,35 +59,6 @@ export default function FAQ() {
           },
         }
       );
-
-      gsap.fromTo(
-        ".faq-pandit-image",
-        { scale: 1.08, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 1.6,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: ".faq-pandit-section",
-            start: "top 75%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
-      gsap.from(".faq-pandit-text > *", {
-        scrollTrigger: {
-          trigger: ".faq-pandit-section",
-          start: "top 70%",
-          toggleActions: "play none none none",
-        },
-        x: 40,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.15,
-        ease: "power3.out",
-      });
     },
     { scope: sectionRef }
   );
@@ -102,53 +73,6 @@ export default function FAQ() {
       ref={sectionRef}
       className="relative w-full bg-[#FAF6EE] overflow-hidden"
     >
-      {/* ── Pandit Story Block ──────────────────────────────── */}
-      <div className="faq-pandit-section w-full flex flex-col md:flex-row bg-[#7A1F2B] overflow-hidden">
-        {/* Left Image */}
-        <div className="relative w-full md:w-[45%] h-[340px] md:h-auto min-h-[420px] lg:min-h-[520px] overflow-hidden">
-          <Image
-            src="/images/pandit_jis.jpg"
-            alt="Pandits of Devbhoomi performing Havan"
-            fill
-            priority
-            className="faq-pandit-image object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#7A1F2B]/30 hidden md:block" />
-        </div>
-
-        {/* Right Text */}
-        <div className="relative w-full md:w-[55%] flex flex-col justify-center px-8 py-16 md:p-12 lg:p-20 xl:p-24">
-          {/* Spinning mandala */}
-          <div className="absolute -top-[180px] -right-[180px] w-[500px] h-[500px] pointer-events-none select-none opacity-[0.12]">
-            <Image
-              src="/images/circle_design.png"
-              alt=""
-              fill
-              className="object-contain animate-[spin_60s_linear_infinite]"
-            />
-          </div>
-
-          <div className="faq-pandit-text relative z-10 max-w-[550px]">
-            <p className="text-[#C9A24B] text-[10px] md:text-[11px] font-semibold tracking-[0.2em] uppercase mb-4 md:mb-5">
-              500+ YEARS OF WISDOM
-            </p>
-            <h2 className="font-display font-medium text-[#FAF6EE] text-[34px] sm:text-[40px] md:text-[48px] lg:text-[54px] leading-[1.1] mb-5 md:mb-6">
-              Blessed by the Pandits
-              <br />of Devbhoomi
-            </h2>
-            <p className="font-body text-[14px] md:text-[15px] lg:text-[16px] leading-[2.2]">
-              <span className="bg-[#C9A24B] text-[#1a110a] font-medium py-1 px-1.5 box-decoration-clone">
-                Every blend is guided by the knowledge of 500+ pandits —
-                <br className="hidden xl:block" />
-                the same hands that have performed hawans in Devbhoomi&apos;s
-                <br className="hidden xl:block" />
-                temples for generations.
-              </span>
-            </p>
-          </div>
-        </div>
-      </div>
-
       {/* ── FAQ Accordion Section ───────────────────────────── */}
       <div className="relative pt-20 pb-28 md:pt-28 md:pb-36">
 
