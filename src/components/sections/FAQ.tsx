@@ -71,7 +71,7 @@ export default function FAQ() {
     <section
       id="faq"
       ref={sectionRef}
-      className="relative w-full bg-[#FAF6EE] overflow-hidden"
+      className="relative w-full bg-[#FAF6EE] overflow-hidden scroll-mt-20"
     >
       {/* ── FAQ Accordion Section ───────────────────────────── */}
       <div className="relative pt-20 pb-28 md:pt-28 md:pb-36">

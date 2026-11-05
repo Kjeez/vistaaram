@@ -8,8 +8,6 @@ import { ReactNode } from "react";
  * content can never be left hidden by a scroll-triggered script.
  */
 
-const fadeUp = (delayMs: number) => ({ animationDelay: `${delayMs}ms` });
-
 /** Gold line · diamond · gold line. */
 export function OrnamentDivider({ className = "", light = false }: { className?: string; light?: boolean }) {
   const line = light ? "bg-[#E8C77A]/70" : "bg-[#C9A24B]/60";
@@ -66,10 +64,7 @@ export function FlowerSpray({
 
 export type Crumb = { label: string; href?: string };
 
-/**
- * Hero for inner pages: framed by carved temple pillars with bells (desktop), a turning mandala
- * behind the title, flower sprays, and the Devbhoomi mountain line art along the bottom.
- */
+/** Simple header for inner pages (contact, policies): breadcrumb, eyebrow, title, divider, subtitle. */
 export function PageHero({
   eyebrow,
   title,
@@ -87,33 +82,10 @@ export function PageHero({
   children?: ReactNode;
 }) {
   return (
-    <section className="relative w-full overflow-hidden bg-[#FAF6EE]">
-      {/* Warm glow */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 35%, rgba(201,162,75,0.14), transparent 60%), radial-gradient(circle at 85% 90%, rgba(122,31,43,0.05), transparent 40%)",
-        }}
-        aria-hidden="true"
-      />
-
-      <Mandala className="absolute left-1/2 top-6 -translate-x-1/2 w-[420px] h-[420px] md:w-[560px] md:h-[560px]" opacity={0.09} />
-
-      {/* Temple pillars with bells framing the title like a doorway */}
-      <div className="hidden md:block absolute left-0 top-0 h-full w-[130px] lg:w-[170px] pointer-events-none select-none" aria-hidden="true">
-        <Image src="/images/pillar.png" alt="" fill sizes="170px" className="object-contain object-left-top" />
-      </div>
-      <div className="hidden md:block absolute right-0 top-0 h-full w-[130px] lg:w-[170px] pointer-events-none select-none -scale-x-100" aria-hidden="true">
-        <Image src="/images/pillar.png" alt="" fill sizes="170px" className="object-contain object-left-top" />
-      </div>
-
-      <FlowerSpray variant={2} className="absolute top-2 right-3 md:right-[16%] w-[90px] h-[130px] md:w-[120px] md:h-[170px]" opacity={0.35} />
-      <FlowerSpray variant={1} className="absolute bottom-16 left-2 md:left-[15%] w-[80px] h-[120px] md:w-[110px] md:h-[160px]" opacity={0.3} />
-
-      <div className="relative z-10 mx-auto max-w-[760px] px-5 pt-8 pb-28 sm:pt-12 md:pt-16 md:pb-40 text-center">
+    <section className="w-full bg-[#FAF6EE] border-b border-[#EFE5D3]">
+      <div className="mx-auto max-w-[760px] px-5 pt-10 pb-10 sm:pt-12 md:pt-14 md:pb-12 text-center">
         {breadcrumb && (
-          <nav aria-label="Breadcrumb" className="flex items-center justify-center flex-wrap gap-x-2 text-[12px] sm:text-[13px] text-[#8E8783] mb-8 animate-fade-in-up opacity-0" style={fadeUp(0)}>
+          <nav aria-label="Breadcrumb" className="flex items-center justify-center flex-wrap gap-x-2 text-[12px] sm:text-[13px] text-[#8E8783] mb-5">
             {breadcrumb.map((c, i) => (
               <span key={c.label} className="flex items-center gap-2">
                 {i > 0 && <span className="text-[#C9A24B]">/</span>}
@@ -126,33 +98,14 @@ export function PageHero({
             ))}
           </nav>
         )}
-        <p className="text-[#B48635] text-[11px] sm:text-[12px] uppercase tracking-[0.28em] font-semibold mb-4 animate-fade-in-up opacity-0" style={fadeUp(80)}>
-          {eyebrow}
-        </p>
-        <h1 className="font-display font-semibold text-[#7A1F2B] text-[36px] sm:text-[46px] md:text-[56px] leading-[1.08] animate-fade-in-up opacity-0" style={fadeUp(160)}>
-          {title}
-        </h1>
-        <OrnamentDivider className="mt-6 animate-fade-in-up opacity-0" />
+        <p className="text-[#B48635] text-[11px] sm:text-[12px] uppercase tracking-[0.24em] font-semibold mb-3">{eyebrow}</p>
+        <h1 className="font-display font-semibold text-[#7A1F2B] text-[32px] sm:text-[40px] md:text-[46px] leading-[1.1]">{title}</h1>
+        <OrnamentDivider className="mt-4" />
         {hindi && (
-          <p className="mt-5 font-display text-[#7A1F2B]/85 text-[18px] sm:text-[20px] leading-snug animate-fade-in-up opacity-0" style={fadeUp(260)}>
-            देवभूमि की पवित्र सुगंध, अब आपके घर में।
-          </p>
+          <p className="mt-4 font-display text-[#7A1F2B]/85 text-[18px] leading-snug">देवभूमि की पवित्र सुगंध, अब आपके घर में।</p>
         )}
-        {subtitle && (
-          <p className="mt-5 mx-auto max-w-[560px] text-[#5A4F46] text-[15px] sm:text-[16px] leading-relaxed animate-fade-in-up opacity-0" style={fadeUp(320)}>
-            {subtitle}
-          </p>
-        )}
-        {children && (
-          <div className="mt-8 animate-fade-in-up opacity-0" style={fadeUp(400)}>
-            {children}
-          </div>
-        )}
-      </div>
-
-      {/* Devbhoomi mountains */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[640px] sm:w-[900px] md:w-[1100px] h-[90px] sm:h-[120px] md:h-[150px] pointer-events-none select-none opacity-70" aria-hidden="true">
-        <Image src="/images/mountainelement.png" alt="" fill sizes="1100px" className="object-contain object-bottom" />
+        {subtitle && <p className="mt-4 mx-auto max-w-[560px] text-[#5A4F46] text-[15px] sm:text-[16px] leading-relaxed">{subtitle}</p>}
+        {children && <div className="mt-5">{children}</div>}
       </div>
     </section>
   );
