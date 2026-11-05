@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Playfair_Display, Inter, Tiro_Devanagari_Hindi } from "next/font/google";
 import "./globals.css";
 import ScrollToTop from "@/components/ui/ScrollToTop";
 import ScrollTriggerRefresh from "@/components/ui/ScrollTriggerRefresh";
@@ -10,6 +10,15 @@ const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+});
+
+// Devanagari lines ("देवभूमि की पवित्र सुगंध…") on the story and shop pages.
+const tiroHindi = Tiro_Devanagari_Hindi({
+  variable: "--font-hindi",
+  subsets: ["devanagari"],
+  weight: "400",
+  display: "swap",
 });
 
 const inter = Inter({
@@ -61,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${playfairDisplay.variable} ${inter.variable} h-full antialiased`}
+      className={`${playfairDisplay.variable} ${inter.variable} ${tiroHindi.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-cream text-ink font-body">
         <CartProvider>

@@ -28,6 +28,7 @@ module.exports = {
       fontFamily: {
         display: ["var(--font-playfair-display)", "Georgia", "serif"],
         body: ["var(--font-inter)", "system-ui", "sans-serif"],
+        hindi: ["var(--font-hindi)", "serif"],
       },
     },
   },

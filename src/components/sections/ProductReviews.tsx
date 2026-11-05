@@ -187,7 +187,7 @@ export default function ProductReviews() {
     <section id="reviews" className="relative w-full bg-[#FAF6EE] py-16 scroll-mt-24">
       <div className="mx-auto max-w-[1200px] px-6">
         <div className="flex flex-col items-center text-center mb-12">
-          <h2 className="font-display font-medium text-[#7A1F2B] text-[32px] md:text-[40px] mb-4">What Devotees Say</h2>
+          <h2 className="font-display font-medium text-[#7A1F2B] text-[32px] md:text-[40px] mb-4">Customer Reviews</h2>
           {summary && summary.count > 0 && (
             <div className="flex items-center gap-3">
               <Stars rating={summary.average} size={18} />

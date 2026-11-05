@@ -1,16 +1,22 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
-import ProductDetail from "@/components/sections/ProductDetail";
-import HowToUse from "@/components/sections/HowToUse";
-import ProductDetailsAccordion from "@/components/sections/ProductDetailsAccordion";
 import ProductReviews from "@/components/sections/ProductReviews";
-import FAQ from "@/components/sections/FAQ";
-import RelatedProducts from "@/components/sections/RelatedProducts";
-import PahadiDivider from "@/components/ui/PahadiDivider";
-import StickyAddToCart from "@/components/sections/StickyAddToCart";
 import PageTransition from "@/components/ui/PageTransition";
+import PackPurchase from "@/components/editorial/PackPurchase";
+import FaqList from "@/components/editorial/FaqList";
+import {
+  ComingSoonStrip,
+  HowToUseSection,
+  InsideSection,
+  ProcessSection,
+  ProductSubNav,
+  RitualsSection,
+  VoicesSection,
+} from "@/components/editorial/ProductSections";
+import { shortFaqs } from "@/data/editorial";
 import { productContent } from "@/data/content";
 import { PACK_OPTIONS } from "@/lib/medusa";
 import { PRODUCT_PATH, SITE_URL } from "@/lib/site";
@@ -66,33 +72,35 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       />
       <Navbar />
       <PageTransition>
-        <main className="bg-[#FAF6EE]">
-          <ProductDetail />
-          
-          <PahadiDivider className="py-4 bg-[#FAF6EE]" />
-          
-          <HowToUse />
-          
-          <PahadiDivider className="py-4 bg-[#FAF6EE]" />
-          
-          <ProductDetailsAccordion />
-          
-          <PahadiDivider className="py-4 bg-[#FAF6EE]" />
-          
+        <main className="bg-[#FAF6EE] text-[#2A1B18]">
+          <section className="mx-auto max-w-[1200px] px-5 sm:px-[clamp(20px,5vw,48px)] pt-6 pb-[clamp(64px,8vw,104px)]">
+            <nav aria-label="Breadcrumb" className="text-[13px] text-[#66544D] flex flex-wrap gap-2">
+              <Link href="/" className="hover:text-[#7A1F2B]">Home</Link>
+              <span>/</span>
+              <Link href="/shop" className="hover:text-[#7A1F2B]">Shop</Link>
+              <span>/</span>
+              <span className="text-[#2A1B18]">{productContent.name}</span>
+            </nav>
+            <div className="mt-6">
+              <PackPurchase variant="product" />
+            </div>
+          </section>
+
+          <ProductSubNav />
+          <InsideSection />
+          <HowToUseSection />
+          <RitualsSection />
+          <ProcessSection />
+          <VoicesSection />
+          {/* Real customer reviews (approved in the admin) and the write-a-review form. */}
           <ProductReviews />
-          
-          <PahadiDivider className="py-4 bg-[#FAF6EE]" />
-          
-          <FAQ />
-          
-          <PahadiDivider className="py-4 bg-[#FAF6EE]" />
-          
-          <RelatedProducts />
+          <FaqList id="faq" eyebrow="Common questions" faqs={shortFaqs} moreHref="/#faq" />
+          <ComingSoonStrip />
         </main>
       </PageTransition>
       <Footer />
-      
-      <StickyAddToCart />
+      {/* Room for the fixed add-to-cart bar on phones. */}
+      <div className="min-[860px]:hidden h-[76px] bg-[#5A1520]" aria-hidden="true" />
     </>
   );
 }
