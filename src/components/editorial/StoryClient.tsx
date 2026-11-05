@@ -44,10 +44,10 @@ export function MadeCarousel({ children }: { children: React.ReactNode }) {
           </button>
         </div>
       </div>
-      {/* Left edge lines up with the 1200px container on wide screens; the strip bleeds off the right. */}
+      {/* Full-bleed strip: starts just in from the left screen edge and runs off the right. */}
       <div
         ref={scroller}
-        className="mt-12 flex gap-6 overflow-x-auto snap-x snap-proximity [scrollbar-width:none] [&::-webkit-scrollbar]:hidden px-5 sm:px-[clamp(20px,5vw,48px)] min-[1296px]:pl-[calc((100vw-1200px)/2+48px)] scroll-pl-5 sm:scroll-pl-[clamp(20px,5vw,48px)] min-[1296px]:scroll-pl-[calc((100vw-1200px)/2+48px)]"
+        className="mt-12 flex gap-6 overflow-x-auto snap-x snap-proximity [scrollbar-width:none] [&::-webkit-scrollbar]:hidden px-5 sm:px-[clamp(20px,5vw,48px)] scroll-pl-5 sm:scroll-pl-[clamp(20px,5vw,48px)]"
       >
         {madeSteps.map((s, i) => (
           <figure key={s.image} className="shrink-0 w-[clamp(250px,26vw,320px)] snap-start">
