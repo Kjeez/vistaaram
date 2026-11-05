@@ -7,6 +7,7 @@ import {
   ORDER_EMAIL_FIELDS,
   renderOrderEmail,
   storeEmail,
+  orderAlertEmails,
   storefrontUrl,
 } from "../lib/email"
 
@@ -60,12 +61,13 @@ export default async function orderPlacedHandler({ event: { data }, container }:
     })
   }
 
-  if (replyTo) {
+  const alertTo = orderAlertEmails()
+  for (const to of alertTo) {
     await notificationService.createNotifications({
-      to: replyTo,
+      to,
       channel: "email",
       template: "order-placed-admin",
-      idempotency_key: `order-placed-admin-${order.id}`,
+      idempotency_key: `order-placed-admin-${order.id}-${to}`,
       provider_data: order.email ? { reply_to: order.email } : undefined,
       data: { order_id: order.id },
       content: renderOrderEmail({
@@ -83,8 +85,9 @@ export default async function orderPlacedHandler({ event: { data }, container }:
         buttonUrl: `${adminUrl()}/orders/${order.id}`,
       }),
     })
-  } else {
-    logger.warn("STORE_EMAIL is not set; skipping the new-order alert email.")
+  }
+  if (!alertTo.length) {
+    logger.warn("ORDER_ALERT_EMAILS / STORE_EMAIL not set; skipping the new-order alert email.")
   }
 }
 

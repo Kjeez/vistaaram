@@ -5,6 +5,16 @@ export const storefrontUrl = () => (process.env.STOREFRONT_URL || "http://localh
 /** Inbox that receives new-order alerts and customer replies (Google Workspace). */
 export const storeEmail = () => process.env.STORE_EMAIL || process.env.GMAIL_SENDER || ""
 
+/**
+ * Inboxes that get the "new order" alert. Gmail files mail a mailbox sends to itself under Sent,
+ * never the Inbox, so point this at a different mailbox than GMAIL_SENDER (comma-separated list).
+ */
+export const orderAlertEmails = () =>
+  (process.env.ORDER_ALERT_EMAILS || storeEmail())
+    .split(",")
+    .map((e) => e.trim())
+    .filter(Boolean)
+
 /** Public backend URL, used for links into the Medusa admin. */
 export const adminUrl = () => `${(process.env.MEDUSA_BACKEND_URL || "http://localhost:9000").replace(/\/$/, "")}/app`
 
