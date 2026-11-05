@@ -237,8 +237,9 @@ export default function ProductDetail({
               {/* CENTER COLUMN — MAIN BIG IMAGE */}
               <div className="flex-1 min-w-0 flex flex-col">
                 <div 
-                  className="relative w-full aspect-square lg:aspect-auto rounded-[16px] overflow-hidden border border-[#E6DED2] bg-white shadow-[0_4px_24px_rgba(60,35,20,0.04)]"
-                  style={thumbsHeight && thumbsHeight > 0 ? { height: `${thumbsHeight}px` } : { height: "606px" }}
+                  className="relative w-full aspect-square lg:aspect-auto lg:h-[var(--main-h)] rounded-[16px] overflow-hidden border border-[#E6DED2] bg-white shadow-[0_4px_24px_rgba(60,35,20,0.04)]"
+                  // Desktop: as tall as the thumbnail column. Phones/tablets: square, like the shop page.
+                  style={{ "--main-h": thumbsHeight && thumbsHeight > 0 ? `${thumbsHeight}px` : "606px" } as React.CSSProperties}
                 >
                   <Image 
                     src={images[activeThumb].src} 
@@ -260,7 +261,7 @@ export default function ProductDetail({
             </div>
 
             {/* Mobile thumbnails (hidden on desktop) */}
-            <div className="flex lg:hidden gap-3 mt-6 w-full overflow-x-auto pb-2 scrollbar-hide">
+            <div className="flex lg:hidden gap-3 mt-4 w-full overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {images.map((img, i) => (
                 <button
                   key={i}
@@ -284,12 +285,6 @@ export default function ProductDetail({
                   )}
                 </button>
               ))}
-            </div>
-
-            {/* Mobile zoom hint */}
-            <div className="flex lg:hidden items-center justify-center gap-2 mt-3 text-[#756A63] text-[12px] font-medium">
-              <SearchIcon />
-              <span>Hover to zoom · Click to expand</span>
             </div>
           </div>
 
