@@ -6,9 +6,9 @@ import PahadiDivider from "@/components/ui/PahadiDivider";
 import PackPurchase from "@/components/editorial/PackPurchase";
 import { containerClass } from "@/components/editorial/ui";
 import Process from "@/components/sections/Process";
-import PanditStory from "@/components/sections/PanditStory";
+import PanditSection from "@/components/editorial/PanditSection";
 import Rituals from "@/components/sections/Rituals";
-import Testimonials from "@/components/sections/Testimonials";
+import { VoicesSection } from "@/components/editorial/ProductSections";
 import StoriesCarousel from "@/components/sections/StoriesCarousel";
 import FAQ from "@/components/sections/FAQ";
 import ComingSoon from "@/components/sections/ComingSoon";
@@ -44,9 +44,9 @@ export default function Home() {
         </section>
         <Process />
         <PahadiDivider className="hidden md:block py-4 bg-cream" />
-        <PanditStory />
+        <PanditSection id="story" eyebrow="500+ years of wisdom" />
         <Rituals />
-        <Testimonials />
+        <VoicesSection id="testimonials" />
         <StoriesCarousel />
         <PahadiDivider className="hidden md:block py-4 bg-cream" />
         <FAQ />

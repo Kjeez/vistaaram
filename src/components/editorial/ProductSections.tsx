@@ -142,14 +142,14 @@ export function ProcessSection() {
   );
 }
 
-export function VoicesSection() {
+export function VoicesSection({ id = "voices" }: { id?: string } = {}) {
   const stats = [
     { value: socialProof.rating, star: true, label: "average rating" },
     { value: socialProof.homes, label: "homes across India" },
     { value: socialProof.ordersShipped, label: "orders shipped" },
   ];
   return (
-    <section id="voices" className="bg-[#FAF6EE] scroll-mt-[130px]">
+    <section id={id} className="bg-[#FAF6EE] scroll-mt-[130px]">
       <div className={`${containerClass} pt-[clamp(72px,9vw,128px)] pb-8`}>
         <div className="flex flex-wrap justify-between items-end gap-x-12 gap-y-7">
           <div>
