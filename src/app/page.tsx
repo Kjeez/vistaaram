@@ -3,7 +3,8 @@ import Navbar from "@/components/sections/Navbar";
 import HeroSlider from "@/components/sections/HeroSlider";
 import WhyVistaaram from "@/components/sections/WhyVistaaram";
 import PahadiDivider from "@/components/ui/PahadiDivider";
-import ProductDetail from "@/components/sections/ProductDetail";
+import PackPurchase from "@/components/editorial/PackPurchase";
+import { containerClass } from "@/components/editorial/ui";
 import Process from "@/components/sections/Process";
 import PanditStory from "@/components/sections/PanditStory";
 import Rituals from "@/components/sections/Rituals";
@@ -37,16 +38,19 @@ export default function Home() {
       <main>
         <HeroSlider />
         <WhyVistaaram />
-        <ProductDetail showBreadcrumb={false} showTopBorder={true} id="product" />
+        {/* Same buy box as the shop page */}
+        <section id="product" aria-label="Natural Sambrani Hawan Cup" className={`${containerClass} pt-[clamp(40px,6vw,80px)] pb-[clamp(56px,8vw,104px)] scroll-mt-20`}>
+          <PackPurchase variant="shop" mobileBar={false} />
+        </section>
         <Process />
-        <PahadiDivider className="py-4 bg-cream" />
+        <PahadiDivider className="hidden md:block py-4 bg-cream" />
         <PanditStory />
         <Rituals />
         <Testimonials />
         <StoriesCarousel />
-        <PahadiDivider className="py-4 bg-cream" />
+        <PahadiDivider className="hidden md:block py-4 bg-cream" />
         <FAQ />
-        <PahadiDivider className="py-4 bg-cream" />
+        <PahadiDivider className="hidden md:block py-4 bg-cream" />
         <ComingSoon />
       </main>
       <Footer />

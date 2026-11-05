@@ -65,11 +65,11 @@ export default function ComingSoon() {
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-[1200px] mx-auto">
+        <div className="flex md:grid md:grid-cols-3 gap-4 md:gap-8 max-w-[1200px] mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory -mx-4 px-4 md:mx-auto md:px-0 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {items.map((item, i) => (
             <div
               key={i}
-              className="animate-in flex flex-col bg-[#FDFCF8] border-[2px] border-dashed border-[#C9A24B] rounded-[16px] overflow-hidden p-5 shadow-sm hover:shadow-md transition-shadow duration-300 relative group"
+              className="animate-in shrink-0 w-[82%] md:w-auto snap-start flex flex-col bg-[#FDFCF8] border-[2px] border-dashed border-[#C9A24B] rounded-[16px] overflow-hidden p-5 shadow-sm hover:shadow-md transition-shadow duration-300 relative group"
             >
               {/* Corner Ornaments */}
               <div className="absolute top-1 left-1 w-3 h-3 md:w-4 md:h-4 text-[#C9A24B]">

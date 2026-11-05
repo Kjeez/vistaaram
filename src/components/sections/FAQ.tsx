@@ -9,9 +9,13 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Questions shown before "Show all"; the full list is still in the FAQ rich results on the page.
+const FAQ_PREVIEW = 6;
+
 export default function FAQ() {
   const sectionRef = useRef<HTMLElement>(null);
   const { sectionTitle, faqs } = faqContent;
+  const [showAll, setShowAll] = useState(false);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   useGSAP(
@@ -123,7 +127,7 @@ export default function FAQ() {
         <div className="relative z-10 max-w-[860px] mx-auto px-5 md:px-10">
 
           {/* Header */}
-          <div className="faq-animate flex flex-col items-center text-center mb-14">
+          <div className="faq-animate flex flex-col items-center text-center mb-8 md:mb-14">
             <p className="text-[#C9A24B] text-[11px] font-semibold tracking-[0.22em] uppercase mb-4">
               COMMON QUESTIONS
             </p>
@@ -134,8 +138,8 @@ export default function FAQ() {
           </div>
 
           {/* Accordion Cards */}
-          <div className="faq-accordion-wrap flex flex-col gap-4">
-            {faqs.map((faq, index) => {
+          <div className="faq-accordion-wrap flex flex-col gap-3 md:gap-4">
+            {(showAll ? faqs : faqs.slice(0, FAQ_PREVIEW)).map((faq, index) => {
               const isOpen = openIndex === index;
 
               return (
@@ -149,7 +153,7 @@ export default function FAQ() {
                 >
                   <button
                     onClick={() => toggleFAQ(index)}
-                    className="w-full flex items-center justify-between px-7 py-7 md:px-9 md:py-8 text-left group"
+                    className="w-full flex items-center justify-between px-5 py-5 md:px-9 md:py-8 text-left group"
                   >
                     {/* Number + Question */}
                     <div className="flex items-start gap-4 md:gap-5 flex-1 pr-4">
@@ -163,7 +167,7 @@ export default function FAQ() {
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       <span
-                        className={`font-display font-medium text-[18px] md:text-[22px] leading-snug transition-colors duration-300 ${
+                        className={`font-display font-medium text-[17px] md:text-[22px] leading-snug transition-colors duration-300 ${
                           isOpen
                             ? "text-[#7A1F2B]"
                             : "text-[#4A3728] group-hover:text-[#7A1F2B]"
@@ -200,7 +204,7 @@ export default function FAQ() {
                       isOpen ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"
                     }`}
                   >
-                    <div className="px-7 md:px-9 pb-8 md:pb-10" style={{ paddingLeft: "calc(1.75rem + 2.25rem + 1rem)" }}>
+                    <div className="px-5 md:px-9 pb-6 md:pb-10 pl-[calc(1.25rem+2.25rem)] md:pl-[calc(2.25rem+2.25rem+1rem)]">
                       <div className="w-10 h-[1.5px] bg-[#C9A24B]/40 mb-4 rounded-full" />
                       <p className="text-[#625A54] text-[15px] md:text-[17px] leading-relaxed font-body">
                         {faq.answer}
@@ -211,6 +215,18 @@ export default function FAQ() {
               );
             })}
           </div>
+
+          {faqs.length > FAQ_PREVIEW && (
+            <div className="mt-8 flex justify-center">
+              <button
+                type="button"
+                onClick={() => setShowAll((v) => !v)}
+                className="h-11 px-6 rounded-full border border-[#C9A24B] text-[#7A1F2B] text-[13px] font-semibold tracking-[0.1em] uppercase hover:bg-[#7A1F2B] hover:text-[#FAF6EE] hover:border-[#7A1F2B] transition-colors"
+              >
+                {showAll ? "Show fewer questions" : `Show all ${faqs.length} questions`}
+              </button>
+            </div>
+          )}
 
         </div>
       </div>

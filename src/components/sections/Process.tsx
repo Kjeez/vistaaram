@@ -183,7 +183,7 @@ export default function Process() {
       <div className="relative z-10 mx-auto max-w-[1440px] px-4 md:px-8">
         
         {/* Header */}
-        <div className="process-header flex flex-col items-center text-center mb-20 pt-4">
+        <div className="process-header flex flex-col items-center text-center mb-10 md:mb-20 pt-4">
           <div className="flex items-center gap-4 mb-3">
             <div className="w-12 h-px bg-[#C9A24B]/50" />
             <span className="text-[#C9A24B] text-[12px] font-semibold tracking-[0.24em] uppercase">
@@ -225,7 +225,7 @@ export default function Process() {
           </div>
 
           {/* Steps Grid */}
-          <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-12">
+          <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8 md:gap-y-12">
             {processSteps.map((step) => (
               <div key={step.step} className="process-step flex flex-col items-center text-center">
                 

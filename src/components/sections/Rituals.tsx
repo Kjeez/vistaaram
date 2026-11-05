@@ -63,15 +63,6 @@ function HouseIcon() {
   );
 }
 
-function ArrowRight() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="5" y1="12" x2="19" y2="12"></line>
-      <polyline points="12 5 19 12 12 19"></polyline>
-    </svg>
-  );
-}
-
 const rituals = [
   {
     id: 1,
@@ -173,9 +164,9 @@ export default function Rituals() {
         </div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8">
+        <div className="flex sm:grid sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8 overflow-x-auto sm:overflow-visible snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {rituals.map((ritual) => (
-            <div key={ritual.id} className="ritual-card h-full">
+            <div key={ritual.id} className="ritual-card h-full shrink-0 w-[78%] sm:w-auto snap-start">
               <div 
                 className="group relative h-full bg-white rounded-xl border border-[#C9A24B]/30 hover:border-[#C9A24B]/60 hover:shadow-xl transition-all duration-500 overflow-hidden flex flex-col"
               >
@@ -196,20 +187,14 @@ export default function Rituals() {
               </div>
 
               {/* Text Content */}
-              <div className="flex flex-col items-center text-center p-8 pt-10 flex-1 bg-gradient-to-b from-[#FAF6EE]/30 to-[#FAF6EE]/50">
+              <div className="flex flex-col items-center text-center p-6 pt-10 md:p-8 md:pt-10 flex-1 bg-gradient-to-b from-[#FAF6EE]/30 to-[#FAF6EE]/50">
                 <h3 className="font-display font-semibold text-[#7A1F2B] text-[20px] md:text-[22px] mb-2">
                   {ritual.title}
                 </h3>
                 
-                <p className="text-[#625A54] text-[13px] md:text-[14px] leading-[1.5] whitespace-pre-line mb-6 flex-1">
+                <p className="text-[#625A54] text-[13px] md:text-[14px] leading-[1.5] whitespace-pre-line flex-1">
                   {ritual.desc}
                 </p>
-
-                {/* Learn More Link */}
-                <button className="flex items-center gap-2 text-[#9B702C] hover:text-[#7A1F2B] font-semibold text-[13px] tracking-wide uppercase transition-colors duration-300">
-                  <span>Learn More</span>
-                  <ArrowRight />
-                </button>
               </div>
 
             </div>
